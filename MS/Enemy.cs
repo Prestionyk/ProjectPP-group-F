@@ -2,9 +2,9 @@
 
 namespace ProjectGame
 {
-    public class Enemy : EnemyInterface
+    public class Enemy 
     {
-        public string name;
+        protected string name;
         protected int HP=100, MAXHP=100, MP=20, MAXMP=20, STR=10, DEF=10, INT=10, AGI=10;
         
         public List<int> GetStats()
@@ -15,6 +15,20 @@ namespace ProjectGame
 
             return stats;
         }
+        public string GetName()
+        {
+            return name;
+        }
 
+        public void attack(Enemy attacker/*, Player player*/)
+        {
+
+        }
+
+        public bool checkIfDied()
+        {
+            if (HP <= 0) return true;
+            else return false;
+        }
     }
 }
