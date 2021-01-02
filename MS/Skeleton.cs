@@ -4,17 +4,12 @@ namespace ProjectGame
     class Skeleton : Enemy 
     {
 
-        public Skeleton(string name, int HP, int MAXHP, int MP, int MAXMP, int STR, int DEF, int INT, int AGI)
+        public Skeleton()
         {
-            this.name = name;
-            this.HP = HP;
-            this.MAXHP = MAXHP;
-            this.MP = MP;
-            this.MAXMP = MAXMP;
-            this.STR = STR;
-            this.DEF = DEF;
-            this.INT = INT;
-            this.AGI = AGI;
+            this.name = "Skeleton";
+            this.HP = 30;
+            this.MAXHP = 30;
+            this.STR = 8;
 
         }
 

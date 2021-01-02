@@ -6,7 +6,7 @@ namespace ProjectGame
         static void Main(string[] args)
         {
 
-            Skeleton Skeleton = new Skeleton("Skeleton",5,5,5,5,5,5,5,5);
+            Skeleton Skeleton = new Skeleton();
 
             Fight Round_one = new Fight();
 
