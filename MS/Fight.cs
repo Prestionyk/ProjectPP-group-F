@@ -5,10 +5,10 @@ namespace ProjectGame
 {
     class Fight
     {
-        private List<Foe> enemyList = new List<Foe>();
+        private List<EnemyInterface> enemyList = new List<EnemyInterface>();
 
         public Fight() { }
-        public static Fight operator +(Fight fight, Foe enemy)
+        public static Fight operator +(Fight fight, EnemyInterface enemy)
         {
 
             fight.enemyList.Add(enemy);
@@ -17,7 +17,7 @@ namespace ProjectGame
 
         public void whosInFight()
         {
-            foreach(Foe enemy in enemyList)
+            foreach(Enemy enemy in enemyList)
             {
                 Console.WriteLine(enemy.name);
             }

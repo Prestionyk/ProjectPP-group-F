@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace ProjectGame
 {
     class Program
@@ -7,15 +6,11 @@ namespace ProjectGame
         static void Main(string[] args)
         {
 
-            Foe Slime = new Foe("Slime");
-            Foe Skeleton = new Foe("Skeleton");
-            Foe Spider = new Foe("Spider");
+            Skeleton Skeleton = new Skeleton("Skeleton",5,5,5,5,5,5,5,5);
 
             Fight Round_one = new Fight();
 
-            Round_one += Slime;
             Round_one += Skeleton;
-            Round_one += Spider;
 
             Round_one.whosInFight();
         }
