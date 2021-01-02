@@ -20,7 +20,7 @@ namespace ProjectGame
             return name;
         }
 
-        public void attack(Enemy attacker/*, Player player*/)
+        public void attack(/*, Player player*/)
         {
 
         }
