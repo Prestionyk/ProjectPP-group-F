@@ -6,6 +6,8 @@ namespace ProjectGame
     {
         protected string name;
         protected int HP=100, MAXHP=100, MP=20, MAXMP=20, STR=10, DEF=10, INT=10, AGI=10;
+        protected string sprite;
+        
         
         public List<int> GetStats()
         {
