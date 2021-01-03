@@ -6,17 +6,22 @@ namespace Projekt
     {
         private readonly int SizeX = 50, SizeY = 5;
         private readonly int PositionLeft = 15, PositionTop = 15;
-        private readonly int PaddingLeft, PaddingRight, PaddingTop, PaddingBottom;
+        //private readonly int PaddingLeft, PaddingRight, PaddingTop, PaddingBottom;
+        private MenuOption[] menuOptions = new MenuOption[4];
 
-
-        private int CursorPositionX, CursorPositionY;
-        private int SelectedOption = 1;
+        //private int CursorPositionX, CursorPositionY;
+        private int SelectedOption = 0;
 
         public Menu() {
-            PaddingLeft = PositionLeft + SizeX / 4;
-            PaddingRight = PositionLeft + SizeX - SizeX / 4 - 4;
-            PaddingTop = PositionTop + SizeY / 5 + 1;
-            PaddingBottom = PositionTop + SizeY - SizeY / 4 + 1;
+            int PaddingLeft = PositionLeft + SizeX / 4;
+            int PaddingRight = PositionLeft + SizeX - SizeX / 4 - 4;
+            int PaddingTop = PositionTop + SizeY / 5 + 1;
+            int PaddingBottom = PositionTop + SizeY - SizeY / 4 + 1;
+
+            menuOptions[0] = new MenuOption("Attack", PaddingLeft, PaddingTop);
+            menuOptions[1] = new MenuOption("Skill", PaddingRight, PaddingTop);
+            menuOptions[2] = new MenuOption("Item", PaddingLeft, PaddingBottom);
+            menuOptions[3] = new MenuOption("Defend", PaddingRight, PaddingBottom);
         }
 
         public void DrawMenu()
@@ -35,15 +40,8 @@ namespace Projekt
             Console.Write("╚" + new string('═', SizeX) + "╝");
 
             //Wypisz opcje
-            Console.SetCursorPosition(PaddingLeft, PaddingTop);
-            Console.Write("ATTACK");
-            Console.SetCursorPosition(PaddingLeft, PaddingBottom);
-            Console.Write("ITEM");
-
-            Console.SetCursorPosition(PaddingRight, PaddingTop);
-            Console.Write("SKILL");
-            Console.SetCursorPosition(PaddingRight, PaddingBottom);
-            Console.Write("DEFEND");            
+            foreach (MenuOption o in menuOptions)            
+                o.Draw();            
 
         }
 
@@ -51,42 +49,34 @@ namespace Projekt
         {
             while (true)
             {
-                Console.SetCursorPosition(CursorPositionX, CursorPositionY);
-                Console.Write(" ");
+                /*Console.SetCursorPosition(CursorPositionX, CursorPositionY);
+                Console.Write(" ");                
 
-                switch (SelectedOption)
-                {
-                    case 1: //Attack
-                        CursorPositionX = PaddingLeft;
-                        CursorPositionY = PaddingTop;
-                        break;
-                    case 2: //Skill
-                        CursorPositionX = PaddingRight;
-                        CursorPositionY = PaddingTop;
-                        break;
-                    case 3: //Item
-                        CursorPositionX = PaddingLeft;
-                        CursorPositionY = PaddingBottom;
-                        break;
-                    case 4: //Defend
-                        CursorPositionX = PaddingRight;
-                        CursorPositionY = PaddingBottom;
-                        break;
-                }
+                CursorPositionX = menuOptions[SelectedOption].GetX();
+                CursorPositionY = menuOptions[SelectedOption].GetY();
+
                 CursorPositionX -= 2; //Offset by się strzałka pojawiła obok opcji
 
                 Console.SetCursorPosition(CursorPositionX, CursorPositionY);
-                Console.Write(">");
+                Console.Write(">");*/
+
+                Console.SetCursorPosition(menuOptions[SelectedOption].GetX()-1, menuOptions[SelectedOption].GetY());
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.BackgroundColor = ConsoleColor.Gray;
+                Console.Write(" ");
+                menuOptions[SelectedOption].Draw();
+                Console.Write(" ");
+                Console.ResetColor();
 
                 int previousSelection = SelectedOption;
                 switch (Controller.GetButton())
                 {
                     case ConsoleKey.LeftArrow:
-                        if (SelectedOption != 3)
+                        if (SelectedOption != 2)
                             SelectedOption--;
                         break;
                     case ConsoleKey.RightArrow:
-                        if (SelectedOption != 2)
+                        if (SelectedOption != 1)
                             SelectedOption++;
                         break;
                     case ConsoleKey.UpArrow:
@@ -97,23 +87,17 @@ namespace Projekt
                         break;
 
                     case ConsoleKey.Z: //Potwierdzenie wyboru
-                        switch (SelectedOption)
-                        {
-                            case 1:
-                                return "Attack";
-                            case 2:
-                                return "Skill";
-                            case 3:
-                                return "Item";
-                            case 4:
-                                return "Defend";
-                        }
-
-                        break;
+                        return menuOptions[SelectedOption].GetName();                        
                 }
 
-                if (SelectedOption < 1 || SelectedOption > 4)
+                if (SelectedOption < 0 || SelectedOption > 3)
                     SelectedOption = previousSelection;
+
+
+                Console.SetCursorPosition(menuOptions[previousSelection].GetX() - 1, menuOptions[previousSelection].GetY());
+                Console.Write(" ");
+                menuOptions[previousSelection].Draw();
+                Console.Write(" ");
             }
         }
 
