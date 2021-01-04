@@ -16,8 +16,8 @@ namespace ProjectGame
                         "     /  \\ " +
                         "   .-'  ,/" ;
             this.name = "Skeleton";
-            this.HP = 30;
-            this.MAXHP = 30;
+            this.HP = 70;
+            this.MAXHP = 70;
             this.STR = 5;
             this.DEF = 6;
             this.INT = 3;
