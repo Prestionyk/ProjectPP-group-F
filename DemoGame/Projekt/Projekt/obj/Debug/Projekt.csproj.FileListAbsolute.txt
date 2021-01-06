@@ -1,0 +1,6 @@
+C:\Users\Mariusz\Downloads\ProjectPP-group-F-main\PT\Projekt\Projekt\bin\Debug\Projekt.exe
+C:\Users\Mariusz\Downloads\ProjectPP-group-F-main\PT\Projekt\Projekt\bin\Debug\Projekt.pdb
+C:\Users\Mariusz\Downloads\ProjectPP-group-F-main\PT\Projekt\Projekt\obj\Debug\Projekt.csprojAssemblyReference.cache
+C:\Users\Mariusz\Downloads\ProjectPP-group-F-main\PT\Projekt\Projekt\obj\Debug\Projekt.csproj.CoreCompileInputs.cache
+C:\Users\Mariusz\Downloads\ProjectPP-group-F-main\PT\Projekt\Projekt\obj\Debug\Projekt.exe
+C:\Users\Mariusz\Downloads\ProjectPP-group-F-main\PT\Projekt\Projekt\obj\Debug\Projekt.pdb
