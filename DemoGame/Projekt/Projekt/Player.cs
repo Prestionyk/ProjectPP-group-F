@@ -6,26 +6,30 @@ namespace Projekt
     {
         private Menu menu = new Menu();
         private int HP = 50, MAXHP = 50, MP = 20, MAXMP = 20, STR = 12, DEF = 10, INT = 8, AGI = 11;
-        public Enemy currentEenemy;
+        private Fight currentFight;
+        //public Enemy currentEenemy;
 
         public Player() {
+            //GlobalsVariables.player = this;
             menu.DrawMenu();
         }
 
-        public void EnterDungeon(Dungeon enteredDungeon)
+        public void Enter(Dungeon enteredDungeon)
         {
-            enteredDungeon.Enter(this);
+            enteredDungeon.BeginFights(this);
         }
-        public void SelectAction(Enemy enemy)
+
+
+        public void SelectAction()
         {
             string Action = menu.SelectAction();
 
-            GetType().GetMethod(Action).Invoke(this, new object[] { enemy });
+            GetType().GetMethod(Action).Invoke(this, null);
         }
 
-        public void Attack(Enemy enemy)
+        public void Attack()
         {
-            enemy.Hurt(STR);   
+            currentFight.GetEnemyList()[0].Hurt(STR);
         }
 
         public int Skill()
@@ -45,7 +49,12 @@ namespace Projekt
         {
             HP -= DMG;
             Console.SetCursorPosition(10, 26);
-            Console.WriteLine($"Pleyer hitt by {DMG}. {HP} HP left.");
+            Console.WriteLine($"Player was hit for {DMG} DMG. {HP} HP left.");
+        }
+
+        public void setCurrentFight(Fight fight)
+        {
+            currentFight = fight;
         }
     }
 }

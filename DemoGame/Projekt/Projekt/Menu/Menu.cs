@@ -5,7 +5,7 @@ namespace Projekt
     class Menu
     {
         private readonly int SizeX = 50, SizeY = 5;
-        private readonly int PositionLeft = 15, PositionTop = 15;
+        private readonly int PositionLeft = 15, PositionTop = 17;
         //private readonly int PaddingLeft, PaddingRight, PaddingTop, PaddingBottom;
         private MenuOption[] menuOptions = new MenuOption[4];
 
@@ -49,24 +49,19 @@ namespace Projekt
         {
             while (true)
             {
-                /*Console.SetCursorPosition(CursorPositionX, CursorPositionY);
-                Console.Write(" ");                
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.SetCursorPosition(menuOptions[SelectedOption].GetX()-2, menuOptions[SelectedOption].GetY());
+                Console.Write(">");
+                menuOptions[SelectedOption].Draw();
+                Console.ResetColor();
 
-                CursorPositionX = menuOptions[SelectedOption].GetX();
-                CursorPositionY = menuOptions[SelectedOption].GetY();
-
-                CursorPositionX -= 2; //Offset by się strzałka pojawiła obok opcji
-
-                Console.SetCursorPosition(CursorPositionX, CursorPositionY);
-                Console.Write(">");*/
-
-                Console.SetCursorPosition(menuOptions[SelectedOption].GetX()-1, menuOptions[SelectedOption].GetY());
+                /*Console.SetCursorPosition(menuOptions[SelectedOption].GetX()-1, menuOptions[SelectedOption].GetY());
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.BackgroundColor = ConsoleColor.Gray;
                 Console.Write(" ");
                 menuOptions[SelectedOption].Draw();
                 Console.Write(" ");
-                Console.ResetColor();
+                Console.ResetColor();*/
 
                 int previousSelection = SelectedOption;
                 switch (Controller.GetButton())
@@ -94,10 +89,13 @@ namespace Projekt
                     SelectedOption = previousSelection;
 
 
-                Console.SetCursorPosition(menuOptions[previousSelection].GetX() - 1, menuOptions[previousSelection].GetY());
+                /*Console.SetCursorPosition(menuOptions[previousSelection].GetX() - 1, menuOptions[previousSelection].GetY());
                 Console.Write(" ");
                 menuOptions[previousSelection].Draw();
+                Console.Write(" ");*/
+                Console.SetCursorPosition(menuOptions[previousSelection].GetX() - 2, menuOptions[previousSelection].GetY());
                 Console.Write(" ");
+                menuOptions[previousSelection].Draw();
             }
         }
 

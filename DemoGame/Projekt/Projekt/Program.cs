@@ -9,17 +9,22 @@ namespace Projekt
             Console.CursorVisible = false;
 
             Player player = new Player();
-            Dungeon Myrtana = new Dungeon();
-            Fight Round_one = new Fight();
+
+            Dungeon dungeon = new Dungeon();
+            Fight Fight_1 = new Fight();
             Skeleton Skeleton = new Skeleton();
+            Enemy Skeleton2 = new Skeleton();
+            Enemy s = new Slime();
 
+            Fight_1 += Skeleton;            
+            Fight_1 += Skeleton2;
+            Fight_1 += s;
 
-            Round_one += Skeleton;
-            Myrtana += Round_one;
+            dungeon += Fight_1;
 
             ///////////////////////////////////////////////////
 
-            player.EnterDungeon(Myrtana);
+            player.Enter(dungeon);            
 
 
         }

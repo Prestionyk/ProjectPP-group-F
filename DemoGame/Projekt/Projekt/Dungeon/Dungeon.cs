@@ -14,7 +14,7 @@ namespace Projekt
             return dungeon;
         }
 
-       public void Enter(Player player)
+       public void BeginFights(Player player)
         {
             foreach (Fight fight in fightList)
                 fight.Start(player);

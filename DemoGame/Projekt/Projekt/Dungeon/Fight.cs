@@ -7,6 +7,8 @@ namespace Projekt
     {
         private List<Enemy> enemyList = new List<Enemy>();
         private bool clear = false;
+        private Player player;
+
         public Fight() { }
         public static Fight operator +(Fight fight, Enemy enemy)
         {
@@ -15,29 +17,57 @@ namespace Projekt
             return fight;
         }
 
-        public void whosInFight()
+        public List<Enemy> GetEnemyList()
         {
-            foreach(Enemy enemy in enemyList)
-            {
-                Console.WriteLine(enemy.GetName());
-            }
+            return enemyList;
         }
 
         public void Start(Player player)
         {
+            this.player = player;
+            player.setCurrentFight(this);
+            //GlobalsVariables.CurrentFight = this;
             
-            foreach(Enemy enemy in enemyList)
-            {
-                while (!enemy.checkIfDied())
-                {
-                    
-                    player.SelectAction(enemy);
 
-                    player.Hurt(enemy.getSTR());
+            Turn();
+        }
+
+        public void Turn()
+        {
+            DrawEnemies();
+
+            while (true)
+            {
+                player.SelectAction();              
+
+                for (int i = 0; i < enemyList.Count; i++)
+                {                    
+                    Enemy enemy = enemyList[i];                    
+                    enemy.Attack(player);
+                    if (i == 0)
+                        enemy.DrawSprite(ConsoleColor.Yellow);
+
                 }
-                Console.WriteLine($"{enemy.GetName()} defeated! ");
-                Console.ReadKey();
             }
+        }
+
+        public void DrawEnemies()
+        {
+            int EnemyPos = 15;
+            int totalWidth = 0;
+            foreach (Enemy e in enemyList)
+                totalWidth += e.GetSpriteWidth();
+            int DistanceBetweenEnemies = (52 - totalWidth) / (enemyList.Count + 1);
+
+            foreach (Enemy enemy in enemyList)
+            {
+                EnemyPos += DistanceBetweenEnemies;
+                enemy.SetPosition(EnemyPos, 15 - enemy.GetSpriteLength() / enemy.GetSpriteWidth());
+                enemy.DrawSprite();
+                enemy.DrawHPBar();
+                EnemyPos += enemy.GetSpriteWidth() + 1;
+            }
+
         }
 
     }
