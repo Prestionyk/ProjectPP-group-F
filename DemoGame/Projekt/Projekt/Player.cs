@@ -6,6 +6,7 @@ namespace Projekt
     public class Player
     {
         private Menu menu = new Menu();
+        private Backpack backpack = new Backpack();
         private int HP = 50, MAXHP = 50, MP = 20, MAXMP = 20, STR = 12, DEF = 10, INT = 8, AGI = 11;
         private Fight currentFight;
         private int LastSelection = 0;
@@ -42,9 +43,10 @@ namespace Projekt
         {
             return 2;
         }
-        public int Item()
+        public void Item()
         {
-            return 3;
+            backpack.DrawBackpack();
+            menu.DrawMenu();
         }
         public int Defend()
         {

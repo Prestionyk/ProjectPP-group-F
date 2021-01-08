@@ -43,6 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Backpack\Backpack.cs" />
+    <Compile Include="Backpack\HealthPotion.cs" />
+    <Compile Include="Backpack\Item.cs" />
+    <Compile Include="Draw\DrawBackpackContent.cs" />
+    <Compile Include="Draw\DrawFrameMenu.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Dungeon\Dungeon.cs" />
@@ -56,7 +61,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Enemies\Skeleton.cs" />
     <Compile Include="Enemies\Slime.cs" />
-    <Compile Include="RefreshField.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
