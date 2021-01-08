@@ -10,7 +10,10 @@ namespace Projekt
     {
         public static ConsoleKey GetButton()
         {
-            return Console.ReadKey(true).Key;
+            ConsoleKey key = Console.ReadKey(true).Key;
+            while (Console.KeyAvailable)
+                Console.ReadKey(true);
+            return key;
         }
     }
 }
