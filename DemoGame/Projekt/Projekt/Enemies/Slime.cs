@@ -21,5 +21,15 @@ namespace Projekt
 
         }
 
+        /*public string EmptySprite()
+        {
+            string space = "                     " +
+                           "                     " +
+                           "                     " +
+                           "                     " +
+                           "                     ";
+            return space;
+        }*/
+
     }
 }

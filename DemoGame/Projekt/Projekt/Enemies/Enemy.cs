@@ -42,7 +42,9 @@ namespace Projekt
             HP -= DMG;
             DrawHPBar();
             Console.SetCursorPosition(10, 25);
-            Console.WriteLine($"{GetName()} was hit for {DMG} DMG. {HP} HP left.");
+            if(checkIfDied())
+                Console.WriteLine($"{GetName()} was hit for {DMG} DMG and died.");
+            else Console.WriteLine($"{GetName()} was hit for {DMG} DMG. {HP} HP left.");
         }
 
         public void SetPosition(int Position_X, int Position_Y)
@@ -62,9 +64,10 @@ namespace Projekt
         {           
             Console.SetCursorPosition(posX, posY);
             string SpriteLine = "";
-            
-            for(int i = 0; i < sprite.Length; i++)
+
+            for (int i = 0; i < sprite.Length; i++)
             {
+                
                 SpriteLine += sprite[i];
                 if (SpriteLine.Length == spriteWidth)
                 {
@@ -94,9 +97,5 @@ namespace Projekt
             else return false;
         }
 
-        /*public int getSTR()
-        {
-            return STR;
-        }*/
     }
 }

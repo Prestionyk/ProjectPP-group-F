@@ -29,7 +29,11 @@ namespace Projekt
 
         public void Attack()
         {
-            currentFight.GetEnemyList()[0].Hurt(STR);
+            try
+            {
+                currentFight.GetEnemyList()[0].Hurt(STR);
+            }
+            catch(ArgumentOutOfRangeException e) { }
         }
 
         public int Skill()

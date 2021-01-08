@@ -27,27 +27,40 @@ namespace Projekt
             this.player = player;
             player.setCurrentFight(this);
             //GlobalsVariables.CurrentFight = this;
-            
 
-            Turn();
+            DrawEnemies();
+            while (!clear)
+            {
+                if (enemyList.Count == 0)
+                {
+                    clear = true;
+                    continue;
+                }
+                Turn();
+            }
+                
         }
 
         public void Turn()
-        {
-            DrawEnemies();
+        {              
+            player.SelectAction();
+            
+            for (int i = 0; i < enemyList.Count; i++)
+             {   
+                
+                Enemy enemy = enemyList[i];
+                if (enemy.checkIfDied())
+                {
+                    RefreshField.EmptySprite();
+                    enemyList.Remove(enemy);
+                    DrawEnemies();
+                    --i;
+                    continue;
+                }    
 
-            while (true)
-            {
-                player.SelectAction();              
-
-                for (int i = 0; i < enemyList.Count; i++)
-                {                    
-                    Enemy enemy = enemyList[i];                    
-                    enemy.Attack(player);
-                    if (i == 0)
-                        enemy.DrawSprite(ConsoleColor.Yellow);
-
-                }
+                enemy.Attack(player);
+                if (i == 0)
+                   enemy.DrawSprite(ConsoleColor.Yellow);
             }
         }
 
