@@ -6,6 +6,9 @@ namespace Projekt
     {
         private readonly int SizeX = 50, SizeY = 5;
         private readonly int PositionLeft = 15, PositionTop = 17;
+
+        private readonly int StatMenuSizeX = 11, StatMenuSizeY = 10;
+        private readonly int StatsPosLeft = 2, StatsPosTop = 12;
         //private readonly int PaddingLeft, PaddingRight, PaddingTop, PaddingBottom;
         private MenuOption[] menuOptions = new MenuOption[4];
 
@@ -25,19 +28,9 @@ namespace Projekt
         }
 
         public void DrawMenu()
-        {        
-            // Narysuj obramówke menu
-            Console.SetCursorPosition(PositionLeft, PositionTop);
-            Console.Write("╔" + new string('═', SizeX) + "╗");
-            for (int i = 0; i <= SizeY; i++)
-            {
-                Console.SetCursorPosition(PositionLeft, Console.CursorTop + 1);
-                Console.Write("║");
-                Console.SetCursorPosition(PositionLeft + SizeX+1, Console.CursorTop);
-                Console.Write("║");
-            }
-            Console.SetCursorPosition(PositionLeft, Console.CursorTop + 1);
-            Console.Write("╚" + new string('═', SizeX) + "╝");
+        {
+            // Narysuj obramówke menu 
+            DrawFrame(PositionLeft, PositionTop, SizeX, SizeY);
 
             //Wypisz opcje
             foreach (MenuOption o in menuOptions)            
@@ -45,11 +38,92 @@ namespace Projekt
 
         }
 
+        public void DrawStats(Player player)
+        {
+            int PosLeft = StatsPosLeft,
+                PosTop = StatsPosTop;
+            DrawFrame(PosLeft, PosTop, StatMenuSizeX, StatMenuSizeY);
+            int[] stats = player.getStats();
+            string line = "";
+            PosTop--;
+            for (int i = 0; i < stats.Length; i++)
+            {
+                PosTop += 2;
+                Console.SetCursorPosition(PosLeft + 2, PosTop);
+                switch (i)
+                {
+                    case 0:
+                        line = "HP";
+                        break;
+                    case 2:
+                        line = "MP";
+                        break;
+                    case 4:
+                        line = "STR";
+                        break;
+                    case 5:
+                        line = "DEF";
+                        break;
+                    case 6:
+                        line = "INT";
+                        break;
+                    case 7:
+                        line = "AGI";
+                        break;
+                }
+                if (i <= 2)
+                    line += string.Format(" {0, 3}/{1}", stats[i], stats[++i]);
+                else                
+                    line += string.Format(" {0, 5}", stats[i]);                
+                Console.Write(line);
+            }
+        }
+
+        public void UpdateHPMP(Player player)
+        {
+            int PosLeft = StatsPosLeft,
+                PosTop = StatsPosTop;
+            int[] stats = player.getStats();
+            string line = "";
+            PosTop--;
+            for (int i = 0; i < 3; i++)
+            {
+                PosTop += 2;
+                Console.SetCursorPosition(PosLeft + 2, PosTop);
+                switch (i)
+                {
+                    case 0:
+                        line = "HP";
+                        break;
+                    case 2:
+                        line = "MP";
+                        break;
+                }
+                line += string.Format(" {0, 3}/{1}", stats[i], stats[++i]);
+                Console.Write(line);
+            }
+        }
+
+        public void DrawFrame(int PositionLeft, int PositionTop, int SizeX, int SizeY)
+        {
+            Console.SetCursorPosition(PositionLeft, PositionTop);
+            Console.Write("╔" + new string('═', SizeX) + "╗");
+            for (int i = 0; i <= SizeY; i++)
+            {
+                Console.SetCursorPosition(PositionLeft, Console.CursorTop + 1);
+                Console.Write("║");
+                Console.SetCursorPosition(PositionLeft + SizeX + 1, Console.CursorTop);
+                Console.Write("║");
+            }
+            Console.SetCursorPosition(PositionLeft, Console.CursorTop + 1);
+            Console.Write("╚" + new string('═', SizeX) + "╝");
+        }
+
         public string SelectAction()
         {
             while (true)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = Program.HighlightColor;
                 Console.SetCursorPosition(menuOptions[SelectedOption].GetX()-2, menuOptions[SelectedOption].GetY());
                 Console.Write(">");
                 menuOptions[SelectedOption].Draw();
@@ -82,6 +156,7 @@ namespace Projekt
                         break;
 
                     case ConsoleKey.Z: //Potwierdzenie wyboru
+                        DeselectAction();
                         return menuOptions[SelectedOption].GetName();                        
                 }
 
@@ -99,6 +174,12 @@ namespace Projekt
             }
         }
 
+        public void DeselectAction()
+        {
+            Console.SetCursorPosition(menuOptions[SelectedOption].GetX() - 2, menuOptions[SelectedOption].GetY());
+            Console.Write(" ");
+            menuOptions[SelectedOption].Draw();
+        }
         
     }
 }

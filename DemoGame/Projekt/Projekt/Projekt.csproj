@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class1.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Dungeon\Dungeon.cs" />
     <Compile Include="Enemies\Enemy.cs" />

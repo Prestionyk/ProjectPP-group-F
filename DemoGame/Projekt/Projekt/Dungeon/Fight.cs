@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Projekt
 {
@@ -51,16 +52,14 @@ namespace Projekt
                 Enemy enemy = enemyList[i];
                 if (enemy.checkIfDied())
                 {
-                    RefreshField.EmptySprite();
-                    enemyList.Remove(enemy);
-                    DrawEnemies();
+                    enemy.ClearSpriteAndHPBar();
+                    enemyList.Remove(enemy);                    
                     --i;
                     continue;
                 }    
 
                 enemy.Attack(player);
-                if (i == 0)
-                   enemy.DrawSprite(ConsoleColor.Yellow);
+                Thread.Sleep(500);
             }
         }
 

@@ -4,7 +4,7 @@ namespace Projekt
 {
     static class RefreshField
     {
-
+        //Jest inny sposób na clearowanie więc raczej można to usunąć ale na razie zostawie
         public static void EmptySprite()
         {
             string clear = "";

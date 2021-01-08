@@ -9,7 +9,9 @@ namespace Projekt
         protected int HP=100, MAXHP=100, MP=20, MAXMP=20, STR=10, DEF=10, INT=10, AGI=10;
         protected string sprite;
         protected int spriteWidth, posX, posY;
-        
+
+        private readonly int HPBarWidth = 8;
+
         public List<int> GetStats()
         {
             List<int> stats = new List<int>() {
@@ -43,7 +45,7 @@ namespace Projekt
             DrawHPBar();
             Console.SetCursorPosition(10, 25);
             if(checkIfDied())
-                Console.WriteLine($"{GetName()} was hit for {DMG} DMG and died.");
+                Console.WriteLine($"{GetName()} was hit for {DMG} DMG and died."); //Powinno wysyłac do loga
             else Console.WriteLine($"{GetName()} was hit for {DMG} DMG. {HP} HP left.");
         }
 
@@ -79,16 +81,27 @@ namespace Projekt
         }        
 
         public void DrawHPBar()
-        {
-            int Width = 8;
-            Console.SetCursorPosition(posX - (Width + 2) /2 + spriteWidth / 2, posY + sprite.Length / spriteWidth + 1);            
+        {            
+            Console.SetCursorPosition(posX - (HPBarWidth + 2) /2 + spriteWidth / 2, posY + sprite.Length / spriteWidth + 1);            
             string bar = "[";
-            for (int i = 0; i < Width ; i++)
+            for (int i = 0; i < HPBarWidth ; i++)
             {
-                bar += i <= (Width * HP / MAXHP) ? "═" : "-";
+                bar += i <= (HPBarWidth * HP / MAXHP) ? "═" : "-";
             }
             bar += "]";
             Console.Write(bar);
+        }
+
+        public void ClearSpriteAndHPBar()
+        {
+            Console.SetCursorPosition(posX, posY);
+            for (int i = 0; i <= sprite.Length; i += spriteWidth)
+            {
+                Console.Write(new string(' ', spriteWidth));
+                Console.SetCursorPosition(posX, posY + (i + 1) / spriteWidth);
+            }
+            Console.SetCursorPosition(posX - (HPBarWidth + 2) / 2 + spriteWidth / 2, posY + sprite.Length / spriteWidth + 1);
+            Console.Write(new string(' ', HPBarWidth + 2));                        
         }
 
         public bool checkIfDied()
