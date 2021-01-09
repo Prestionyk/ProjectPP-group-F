@@ -45,8 +45,8 @@ namespace Projekt
             DrawHPBar();
             Console.SetCursorPosition(10, 25);
             if(checkIfDied())
-                Console.WriteLine($"{GetName()} was hit for {DMG} DMG and died."); //Powinno wysyłac do loga
-            else Console.WriteLine($"{GetName()} was hit for {DMG} DMG. {HP} HP left.");
+                Log.Send($"{GetName()} was hit for {DMG} DMG and died."); //Powinno wysyłac do loga
+            else Log.Send($"{GetName()} was hit for {DMG} DMG. {HP} HP left.");
         }
 
         public void SetPosition(int Position_X, int Position_Y)

@@ -1,15 +1,18 @@
-﻿using System;
+﻿using Projekt.Usable;
+using System;
 using System.Collections.Generic;
 
 namespace Projekt
 {
     public class Player
     {
-        private Menu menu = new Menu();
-        private Backpack backpack = new Backpack();
+        private Menu menu = new Menu();        
         private int HP = 50, MAXHP = 50, MP = 20, MAXMP = 20, STR = 12, DEF = 10, INT = 8, AGI = 11;
+        private List<IUsable> Items = new List<IUsable>() { new ThrowingKnife(), new HealthPotion(), new ThrowingKnife(), new HealthPotion() };
         private Fight currentFight;
         private int LastSelection = 0;
+
+        private bool Defending, Return;
         //public Enemy currentEenemy;
 
         public Player() {
@@ -22,12 +25,28 @@ namespace Projekt
             enteredDungeon.BeginFights(this);
         }
 
+        public void PlayerTurn()
+        {
+            if (Defending)
+                Defending = false;
+
+            do
+            {
+                Return = false;
+                SelectAction();                
+            }
+            while (Return);
+        }
 
         public void SelectAction()
         {
+            menu.DrawMenu();
             string Action = menu.SelectAction();
-            
-            GetType().GetMethod(Action).Invoke(this, null);
+            try
+            {
+                GetType().GetMethod(Action).Invoke(this, null);
+            }
+            catch (Exception) { Return = true; }
         }
 
         public void Attack()
@@ -36,7 +55,7 @@ namespace Projekt
             {
                 SelectTarget(currentFight).Hurt(STR);
             }
-            catch(ArgumentOutOfRangeException e) { }
+            catch(Exception) { Return = true; }
         }
 
         public int Skill()
@@ -45,12 +64,19 @@ namespace Projekt
         }
         public void Item()
         {
-            backpack.DrawBackpack();
-            menu.DrawMenu();
+            //backpack.DrawBackpack();
+            try
+            {
+                int index = int.Parse(menu.DrawUsable(Items));
+                Items[index].Use(currentFight);
+                Items.RemoveAt(index);                
+            }
+            catch (Exception) { Return = true; }
+
         }
-        public int Defend()
+        public void Defend()
         {
-           return 4;
+            Defending = true;
         }
 
         public Enemy SelectTarget(Fight fight)
@@ -77,6 +103,9 @@ namespace Projekt
                         LastSelection = CurrentSelection;
                         enemyList[CurrentSelection].DrawSprite();
                         return enemyList[CurrentSelection];
+                    case ConsoleKey.X:
+                        enemyList[CurrentSelection].DrawSprite();
+                        return null;
                 }
                 if (CurrentSelection < 0)
                     CurrentSelection = 0;
@@ -89,12 +118,23 @@ namespace Projekt
             }            
         }
 
+        public void Heal(int Amount)
+        {
+            if (HP + Amount > MAXHP)
+                Amount = MAXHP - HP;
+            HP += Amount;                        
+            menu.UpdateStat(this, 0);
+            Log.Send($"Player recovered {Amount} HP. {HP} HP left.");
+        }
+
         public void Hurt(int DMG)
         {
+            if (Defending)
+                DMG = 0;
             HP -= DMG;
-            menu.UpdateHPMP(this);
-            Console.SetCursorPosition(10, 26);
-            Console.WriteLine($"Player was hit for {DMG} DMG. {HP} HP left."); //Powinno wysyłać do loga
+            menu.UpdateStat(this, 0);            
+            Log.Send($"Player took {DMG} DMG. {HP} HP left.");
+            //Console.WriteLine($"Player was hit for {DMG} DMG. {HP} HP left."); //Powinno wysyłać do loga
         }
 
         public void setCurrentFight(Fight fight)
@@ -105,6 +145,20 @@ namespace Projekt
         public int[] getStats()
         {
             return new int[8] { HP, MAXHP, MP, MAXMP, STR, DEF, INT, AGI };
+        }
+        public int getStat(int index)
+        {
+            switch (index)
+            {
+                case 0: return HP;
+                case 1: return MAXHP;
+                case 2: return MP;
+                case 3: return MAXMP;
+                case 4: return STR;
+                case 5: return DEF;
+                case 6: return INT;
+            }
+            return 0;
         }
     }
 }
