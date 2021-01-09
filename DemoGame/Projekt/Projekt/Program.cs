@@ -29,7 +29,12 @@ namespace Projekt
             dungeon += Fight_2;
             ///////////////////////////////////////////////////
 
-            player.Enter(dungeon);
+            if (!player.Enter(dungeon))
+            {
+                Console.Clear();
+                Console.WriteLine("Przegrałeś, zostałeś zabity.");
+            }
+
 
             Console.ReadKey();
         }

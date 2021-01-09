@@ -21,9 +21,11 @@ namespace Projekt
             menu.DrawStats(this);
         }
 
-        public void Enter(Dungeon enteredDungeon)
+        public bool Enter(Dungeon enteredDungeon)
         {
-            enteredDungeon.BeginFights(this);
+            if (!enteredDungeon.BeginFights(this))
+                return true;
+            else return false;
         }
 
         public void PlayerTurn()
@@ -186,7 +188,6 @@ namespace Projekt
             }
             return 0;
         }
-
         public void RegenerateMP()
         {
             MP += 3;
@@ -194,10 +195,16 @@ namespace Projekt
                 MP = MAXMP;
             menu.UpdateStat(this,2);
         }
-
         public void PickUp(IUsable item)
         {
             Items.Add(item);
+        }
+
+        public bool checkIfDied()
+        {
+            if (HP <= 0)
+                return true;
+            return false;
         }
     }
 }

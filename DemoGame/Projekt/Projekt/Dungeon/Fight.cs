@@ -22,23 +22,24 @@ namespace Projekt
         public List<Enemy> GetEnemyList() { return enemyList; }
         public Player GetPlayer() { return player; }
 
-        public void Start(Player player)
+        public bool Start(Player player)
         {
             this.player = player;
             player.setCurrentFight(this);
+            bool PlayerIsDead = false;
             //GlobalsVariables.CurrentFight = this;
 
             DrawEnemies();
-            while (!clear)
+            while (!clear && !PlayerIsDead)
             {
-                Turn();
-                if (enemyList.Count == 0)                
+                PlayerIsDead = Turn();
+                if (enemyList.Count == 0)
                     clear = true;
             }
-                
+            return PlayerIsDead;    
         }
 
-        public void Turn()
+        public bool Turn()
         {
             TurnCount++;
             Log.Send($"----- Turn {TurnCount} -----");
@@ -61,13 +62,14 @@ namespace Projekt
             for (int i = 0; i < enemyList.Count; i++)
             {
                 Thread.Sleep(500);
-                Enemy enemy = enemyList[i];                
-                enemy.Attack(player);                
+                Enemy enemy = enemyList[i];
+                enemy.Attack(player);
+                if (player.checkIfDied()) return true;
             }
             
             Log.Send("");
             Thread.Sleep(300);
-            
+            return false;
         }
 
         public void DrawEnemies()
