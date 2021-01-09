@@ -43,7 +43,6 @@ namespace Projekt
             TurnCount++;
             Log.Send($"----- Turn {TurnCount} -----");
 
-
             player.PlayerTurn();
 
             for (int i = 0; i < enemyList.Count; i++)
@@ -67,6 +66,7 @@ namespace Projekt
             
             Log.Send("");
             Thread.Sleep(300);
+            
         }
 
         public void DrawEnemies()
