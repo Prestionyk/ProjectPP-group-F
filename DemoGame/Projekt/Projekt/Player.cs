@@ -9,6 +9,7 @@ namespace Projekt
         private Menu menu = new Menu();        
         private int HP = 50, MAXHP = 50, MP = 20, MAXMP = 20, STR = 12, DEF = 10, INT = 8, AGI = 11;
         private List<IUsable> Items = new List<IUsable>() { new ThrowingKnife(), new HealthPotion(), new ThrowingKnife(), new HealthPotion() };
+        private List<IUsable> Skills = new List<IUsable>() { new Fireball(), new ElectricPulse(), new WaterPillar() };
         private Fight currentFight;
         private int LastSelection = 0;
 
@@ -27,6 +28,8 @@ namespace Projekt
 
         public void PlayerTurn()
         {
+            RegenerateMP();
+
             if (Defending)
                 Defending = false;
 
@@ -36,6 +39,7 @@ namespace Projekt
                 SelectAction();                
             }
             while (Return);
+            
         }
 
         public void SelectAction()
@@ -58,13 +62,19 @@ namespace Projekt
             catch(Exception) { Return = true; }
         }
 
-        public int Skill()
+        public void Skill()
         {
-            return 2;
+            try
+            {
+                int index = int.Parse(menu.DrawUsable(Skills));
+                Skills[index].Use(currentFight);
+                
+            }
+            catch (Exception) { Return = true; }
         }
         public void Item()
         {
-            //backpack.DrawBackpack();
+            
             try
             {
                 int index = int.Parse(menu.DrawUsable(Items));
@@ -134,7 +144,23 @@ namespace Projekt
             HP -= DMG;
             menu.UpdateStat(this, 0);            
             Log.Send($"Player took {DMG} DMG. {HP} HP left.");
-            //Console.WriteLine($"Player was hit for {DMG} DMG. {HP} HP left."); //Powinno wysyłać do loga
+            
+        }
+
+        public bool DrainMana(int Amount)
+        {
+            if (MP >= Amount)
+            {
+                MP -= Amount;
+                menu.UpdateStat(this, 2);
+                Log.Send($"Player used skill. {MP} MP left.");
+                return true;
+            }
+            else
+            {
+                Log.Send($"Not enought MP to use skill.");
+            }
+            return false;
         }
 
         public void setCurrentFight(Fight fight)
@@ -159,6 +185,14 @@ namespace Projekt
                 case 6: return INT;
             }
             return 0;
+        }
+
+        public void RegenerateMP()
+        {
+            MP += 3;
+            if (MP > MAXMP)
+                MP = MAXMP;
+            menu.UpdateStat(this,2);
         }
     }
 }
