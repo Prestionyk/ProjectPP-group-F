@@ -1,12 +1,11 @@
 ﻿
 using Projekt.Usable;
-using System;
 
 namespace Projekt
 {
     class HealthPotion : IUsable
     {
-        protected string Name;
+        private string Name;
         public HealthPotion() {
             Name = "Health Potion";
         }

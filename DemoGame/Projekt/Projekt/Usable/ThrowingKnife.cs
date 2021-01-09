@@ -1,12 +1,10 @@
-﻿
-using Projekt.Usable;
-using System;
+﻿using Projekt.Usable;
 
 namespace Projekt
 {
     class ThrowingKnife : IUsable
     {
-        protected string Name;
+        private string Name;
         public ThrowingKnife() {
             Name = "Throwing Knife";
         }
@@ -17,7 +15,7 @@ namespace Projekt
         {
             Player player = fight.GetPlayer();
             Enemy target = player.SelectTarget(fight);
-            target.Hurt(player.getStat(4));
+            target.Hurt((int)(player.getStat(4) * (1.5)));
         }
     }
 }
