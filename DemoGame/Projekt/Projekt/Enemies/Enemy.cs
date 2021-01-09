@@ -41,11 +41,19 @@ namespace Projekt
 
         public void Hurt(int DMG)
         {
+            Hurt(DMG, false);
+        }
+
+        public void Hurt(int DMG, bool magic)
+        {
+            if (!magic)
+                DMG -= (DEF / 5);
+
             HP -= DMG;
             DrawHPBar();
             Console.SetCursorPosition(10, 25);
             if(checkIfDied())
-                Log.Send($"{GetName()} was hit for {DMG} DMG and died."); //Powinno wysyłac do loga
+                Log.Send($"{GetName()} was hit for {DMG} DMG and died.");
             else Log.Send($"{GetName()} was hit for {DMG} DMG. {HP} HP left.");
         }
 
