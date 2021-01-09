@@ -22,7 +22,7 @@ namespace Projekt
             STR = 5;
             DEF = 6;
             INT = 3;
-
+            
         }
 
        /* public string EmptySprite()

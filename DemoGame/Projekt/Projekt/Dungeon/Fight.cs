@@ -51,6 +51,7 @@ namespace Projekt
                 if (enemy.checkIfDied())
                 {
                     enemy.ClearSpriteAndHPBar();
+                    enemy.DropReward(player);
                     enemyList.Remove(enemy);
                     --i;
                     continue;

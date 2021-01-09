@@ -9,7 +9,7 @@ namespace Projekt
         private Menu menu = new Menu();        
         private int HP = 50, MAXHP = 50, MP = 20, MAXMP = 20, STR = 12, DEF = 10, INT = 8, AGI = 11;
         private List<IUsable> Items = new List<IUsable>() { new ThrowingKnife(), new HealthPotion(), new ThrowingKnife(), new HealthPotion() };
-        private List<IUsable> Skills = new List<IUsable>() { new Fireball(), new ElectricPulse(), new WaterPillar() };
+        private List<IUsable> Skills = new List<IUsable>() { new Fireball(), new ElectricPulse(), new WaterSpear() };
         private Fight currentFight;
         private int LastSelection = 0;
 
@@ -193,6 +193,11 @@ namespace Projekt
             if (MP > MAXMP)
                 MP = MAXMP;
             menu.UpdateStat(this,2);
+        }
+
+        public void PickUp(IUsable item)
+        {
+            Items.Add(item);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 namespace Projekt.Usable
 {
-    interface IUsable
+    public interface IUsable
     {
         string GetName();
         void Use(Fight fight);

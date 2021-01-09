@@ -28,7 +28,7 @@ namespace Projekt
             STR = 9;
             DEF = 9;
             INT = 7;
-
+            dropChance = 0;
         }
 
         /*public string EmptySprite()

@@ -9,6 +9,7 @@ namespace Projekt
         protected int HP=100, MAXHP=100, MP=20, MAXMP=20, STR=10, DEF=10, INT=10, AGI=10;
         protected string sprite;
         protected int spriteWidth, posX, posY;
+        protected int dropChance = 2; // czym więcej tym mniejsza szansa
 
         private readonly int HPBarWidth = 8;
 
@@ -118,5 +119,11 @@ namespace Projekt
             else return false;
         }
 
+        public void DropReward(Player player)
+        {
+            Random roll = new Random();
+            if(roll.Next(dropChance) == 0)
+                player.PickUp(new HealthPotion());
+        }
     }
 }
