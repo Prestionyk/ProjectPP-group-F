@@ -18,7 +18,7 @@ namespace Projekt
             if (player.CheckIfEnoughMP(ManaCost))
             {
                 Enemy target = player.SelectTarget(fight);
-                target.Hurt(player.getStat(6) * 2, true);
+                target.Hurt(player.GetStat(6) * 2, true, player);
                 player.DrainMana(ManaCost);
             }
         }
