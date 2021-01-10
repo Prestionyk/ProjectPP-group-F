@@ -60,7 +60,7 @@ namespace Projekt
         {
             try
             {
-                SelectTarget(currentFight).Hurt(STR);
+                SelectTarget(currentFight).Hurt(STR,this);
             }
             catch(NullReferenceException) { Return = true; }
         }
@@ -143,14 +143,45 @@ namespace Projekt
             Log.Send($"* Player recovered {Amount} HP. {HP} HP left.");
         }
 
-        public void Hurt(int DMG)
+        public void Hurt(int DMG, Enemy enemy)
         {
+            DMG -= (DEF / 5);
+
+            Random roll = new Random();
+            bool crit = false, dodge = false;
+
+            if (roll.Next(100) <= enemy.GetStats()[7])
+            {
+                DMG *= 2;
+                crit = true;
+            }
+            if (AGI > enemy.GetStats()[7])
+            {
+                if (roll.Next(100) <= AGI - enemy.GetStat(7))
+                {
+                    DMG = 0;
+                    dodge = true;
+                }
+            }
+
+
             if (Defending)
-                DMG = 0;
+                DMG /= 2;
+
             HP -= DMG;
-            menu.UpdateStat(this, 0);            
+
+            menu.UpdateStat(this, 0);
+
+            if (dodge)
+                Log.Send("* Atack dodged!");
+            else
+            {
+                if (crit)
+                    Log.Send("* Critical Hit!");
+            }
+
             Log.Send($"* Player took {DMG} DMG. {HP} HP left.");
-            
+
         }
 
         public bool CheckIfEnoughMP(int Amount)
@@ -179,23 +210,15 @@ namespace Projekt
             currentFight = fight;
         }
 
-        public int[] getStats()
+        public List<int> GetStats()
         {
-            return new int[8] { HP, MAXHP, MP, MAXMP, STR, DEF, INT, AGI };
+            return new List<int> { 
+                HP, MAXHP, MP, MAXMP, STR, DEF, INT, AGI 
+            };
         }
-        public int getStat(int index)
+        public int GetStat(int index)
         {
-            switch (index)
-            {
-                case 0: return HP;
-                case 1: return MAXHP;
-                case 2: return MP;
-                case 3: return MAXMP;
-                case 4: return STR;
-                case 5: return DEF;
-                case 6: return INT;
-            }
-            return 0;
+            return GetStats()[index];
         }
         public void RegenerateMP(int Amount)
         {
@@ -206,7 +229,16 @@ namespace Projekt
         }
         public void PickUp(IUsable item)
         {
-            Items.Add(item);
+            if(Items.Count == 6)
+            {
+                Log.Send("* Inventory is full.");
+            }
+
+            else 
+            {
+                Log.Send($"* Obtained a {item.GetName()}");
+                Items.Add(item);
+            } 
         }
 
         public void checkIfDied()

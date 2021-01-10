@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Projekt
 {
@@ -34,7 +31,7 @@ namespace Projekt
             for (int i = 0; i < 20; i++)
             {
                 Console.SetCursorPosition(69, 2 + i);
-                Console.Write(new string(' ', 40));
+                Console.Write(new string(' ', 43));
             }
         }
     }
