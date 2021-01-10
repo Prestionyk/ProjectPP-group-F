@@ -30,8 +30,8 @@ namespace Projekt
 
             // Narysuj obramówke menu 
             DrawFrame(PositionLeft, PositionTop, SizeX, SizeY);
-
-            DrawFrame(PositionLeft + SizeX + 2, 0, 42, 21);
+            // Narysuj obramówke loga
+            DrawFrame(PositionLeft + SizeX + 2, 0, 44, 21);
         }
 
         public void DrawMenu()
@@ -52,12 +52,7 @@ namespace Projekt
             PosTop++;
             foreach (IUsable i in list)     //Stwórz MenuOption dla każdego itemu
             {
-                /*PosTop += 2;
-                if (PosTop > PositionTop + 5)
-                {
-                    PosTop = PositionTop + 1;
-                    PosLeft = PositionLeft + SizeX - SizeX / 6 - 12;
-                }*/
+
                 PosLeft += 22;
                 if (PosLeft > PositionLeft + 30)
                 {
@@ -88,10 +83,10 @@ namespace Projekt
             int PosLeft = StatsPosLeft,
                 PosTop = StatsPosTop;
             DrawFrame(PosLeft, PosTop, StatMenuSizeX, StatMenuSizeY);
-            int[] stats = player.getStats();
+            List<int> stats = player.GetStats();
             string line = "";
             PosTop--;
-            for (int i = 0; i < stats.Length; i++)
+            for (int i = 0; i < stats.Count; i++)
             {
                 PosTop += 2;
                 Console.SetCursorPosition(PosLeft + 2, PosTop);
@@ -128,7 +123,7 @@ namespace Projekt
         {
             int PosLeft = StatsPosLeft,
                 PosTop = StatsPosTop;
-            int stat = player.getStat(index);
+            int stat = player.GetStat(index);
             PosTop--;            
             PosTop += 2 * (index+1);
             if (index >= 2) PosTop -= 2;
@@ -136,9 +131,9 @@ namespace Projekt
 
             Console.SetCursorPosition(PosLeft + 2 + 3, PosTop);
             if (index < 3)
-                Console.Write(string.Format("{0, 3}/{1}", player.getStat(index), player.getStat(index+1)));            
+                Console.Write(string.Format("{0, 3}/{1}", player.GetStat(index), player.GetStat(index+1)));            
             else
-                Console.Write(string.Format(" {0, 5}", player.getStat(index)));
+                Console.Write(string.Format(" {0, 5}", player.GetStat(index)));
         }
 
         public void DrawFrame(int PositionLeft, int PositionTop, int SizeX, int SizeY)
