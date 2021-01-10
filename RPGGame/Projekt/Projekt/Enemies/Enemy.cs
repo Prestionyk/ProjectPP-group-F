@@ -21,6 +21,10 @@ namespace Projekt
 
             return stats;
         }
+        public int GetStat(int index)
+        {
+            return GetStats()[index];
+        }
         public string GetName()
         {
             return name;
@@ -37,25 +41,60 @@ namespace Projekt
 
         public void Attack(Player player)
         {
-            player.Hurt(STR);
+            player.Hurt(STR, this);
         }
 
-        public void Hurt(int DMG)
+        public void Hurt(int DMG,Player player)
         {
-            Hurt(DMG, false);
+            Hurt(DMG, false, player);
         }
 
-        public void Hurt(int DMG, bool magic)
+        public void Hurt(int DMG, bool magic, Player player)
         {
+            Random roll = new Random();
+            bool crit = false, dodge = false ;
             if (!magic)
+            {
                 DMG -= (DEF / 5);
+                if (roll.Next(100) <= player.GetStat(7))
+                {
+                    DMG *= 2;
+                    crit = true;
+                }
+                if(player.GetStat(7) > AGI)
+                {
+                    if (roll.Next(100) <= AGI - player.GetStat(7))
+                    {
+                        DMG = 0;
+                        dodge = true;
+                    }
+                } 
+            }
+                
+            else
+            {
+                if (roll.Next(100) <= player.GetStat(6))
+                {
+                    DMG *= 2;
+                    crit = true;
+                }   
+            }
+            if (dodge)
+                Log.Send("* Atack dodged!");
+            else
+            {
+                if (crit)
+                    Log.Send("* Critical Hit!");
+            }
+                
+
+            if (checkIfDied())
+                Log.Send($"* {GetName()} was hit for {DMG} DMG and died.");
+            else
+                Log.Send($"* {GetName()} was hit for {DMG} DMG. {HP} HP left.");
 
             HP -= DMG;
             DrawHPBar();
-            Console.SetCursorPosition(10, 25);
-            if(checkIfDied())
-                Log.Send($"{GetName()} was hit for {DMG} DMG and died.");
-            else Log.Send($"{GetName()} was hit for {DMG} DMG. {HP} HP left.");
         }
 
         public void SetPosition(int Position_X, int Position_Y)
