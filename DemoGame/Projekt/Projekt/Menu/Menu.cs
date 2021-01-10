@@ -23,9 +23,9 @@ namespace Projekt
             int PaddingTop = PositionTop + SizeY / 5 + 2;
             int PaddingBottom = PositionTop + SizeY - SizeY / 4 + 1;
 
-            menuOptions.Add(new MenuOption("Attack", PaddingLeft, PaddingTop));
+            menuOptions.Add(new MenuOption("Attack", PaddingLeft, PaddingTop));            
+            menuOptions.Add(new MenuOption("Skill", PaddingRight, PaddingTop));
             menuOptions.Add(new MenuOption("Item", PaddingLeft, PaddingBottom));
-            menuOptions.Add(new MenuOption("Skill", PaddingRight, PaddingTop));            
             menuOptions.Add(new MenuOption("Defend", PaddingRight, PaddingBottom));
 
             // Narysuj obramówke menu 
@@ -48,22 +48,28 @@ namespace Projekt
             List<MenuOption> options = new List<MenuOption>();
             int PosLeft = PositionLeft,
                 PosTop = PositionTop;
-            PosLeft += SizeX / 6;
-            PosTop--;
+            PosLeft += SizeX / 6 - 22;
+            PosTop++;
             foreach (IUsable i in list)     //Stwórz MenuOption dla każdego itemu
             {
-                PosTop += 2;
+                /*PosTop += 2;
                 if (PosTop > PositionTop + 5)
                 {
                     PosTop = PositionTop + 1;
                     PosLeft = PositionLeft + SizeX - SizeX / 6 - 12;
+                }*/
+                PosLeft += 22;
+                if (PosLeft > PositionLeft + 30)
+                {
+                    PosTop += 2;
+                    PosLeft = PositionLeft + SizeX / 6;
                 }
                 options.Add(new MenuOption(i.GetName(), PosLeft, PosTop));
                 options[options.Count - 1].Draw();      //Wypisz każdą z tych opcji
             }
 
             SelectedOption = 0;
-            return SelectAction(options, 3, true);
+            return SelectAction(options, 2, true);
 
         }
 
@@ -154,6 +160,7 @@ namespace Projekt
 
         public string SelectAction(List<MenuOption> menuOptions, int ListHeight, bool ReturnIndex)
         {
+            SelectedOption = 0;
             while (true)
             {
                 Console.ForegroundColor = Program.HighlightColor;
@@ -173,27 +180,28 @@ namespace Projekt
                 int previousSelection = SelectedOption;
                 switch (Controller.GetButton())
                 {
-                    case ConsoleKey.UpArrow:
-                        if (SelectedOption != ListHeight)
+                    case ConsoleKey.LeftArrow:
+                        if (SelectedOption % ListHeight != 0)
                             SelectedOption--;
                         break;
-                    case ConsoleKey.DownArrow:
-                        if (SelectedOption != ListHeight - 1)
+                    case ConsoleKey.RightArrow:
+                        if (SelectedOption % ListHeight - 1 != 0)
                             SelectedOption++;
                         break;
-                    case ConsoleKey.LeftArrow:
+                    case ConsoleKey.UpArrow:
                         SelectedOption -= ListHeight;
                         break;
-                    case ConsoleKey.RightArrow:
+                    case ConsoleKey.DownArrow:
                         SelectedOption += ListHeight;
                         break;
 
                     case ConsoleKey.Z: //Potwierdzenie wyboru
-                        DeselectAction();
+                        if (menuOptions == this.menuOptions)
+                            DeselectAction();
                         DrawMenu();
                         if (!ReturnIndex)
                             return menuOptions[SelectedOption].GetName();
-                        else
+                        else                            
                             return SelectedOption.ToString();
                     case ConsoleKey.X:
                         return null;

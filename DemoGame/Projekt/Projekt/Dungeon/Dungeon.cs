@@ -14,14 +14,14 @@ namespace Projekt
             return dungeon;
         }
 
-       public bool BeginFights(Player player)
+       public void BeginFights(Player player)
         {
             foreach (Fight fight in fightList)
             {
-                if (fight.Start(player))
-                    return true;
-            }
-            return false;   
+                fight.Start(player);
+                if (fight.GetPlayer() == null)
+                    return;
+            }             
         }
     }
 }

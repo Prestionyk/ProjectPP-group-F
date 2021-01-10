@@ -8,16 +8,19 @@ namespace Projekt
         private int ManaCost = 10;
         public ElectricPulse()
         {
-            Name = "Electric Pulse [10 MP]";
+            Name = "Elec Pulse [10 MP]";
         }
         public string GetName() { return Name; }
 
         public void Use(Fight fight)
         {
             Player player = fight.GetPlayer();
-            Enemy target = player.SelectTarget(fight);
-            if (player.DrainMana(ManaCost))
-                target.Hurt(25,true);
+            if (player.CheckIfEnoughMP(ManaCost))
+            {
+                Enemy target = player.SelectTarget(fight);
+                target.Hurt(player.getStat(6) * 2, true);
+                player.DrainMana(ManaCost);
+            }
         }
     }
 }

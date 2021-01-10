@@ -15,9 +15,12 @@ namespace Projekt
         public void Use(Fight fight)
         {
             Player player = fight.GetPlayer();
-            Enemy target = player.SelectTarget(fight);
-            if(player.DrainMana(ManaCost))
-                target.Hurt(15,true);
+            if (player.CheckIfEnoughMP(ManaCost))
+            {
+                Enemy target = player.SelectTarget(fight);
+                target.Hurt(player.getStat(6), true);
+                player.DrainMana(ManaCost);
+            }
         }
     }
 }

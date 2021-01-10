@@ -7,9 +7,9 @@ namespace Projekt
     public class Player
     {
         private Menu menu = new Menu();        
-        private int HP = 50, MAXHP = 50, MP = 20, MAXMP = 20, STR = 12, DEF = 10, INT = 8, AGI = 11;
+        private int HP = 50, MAXHP = 50, MP = 30, MAXMP = 30, STR = 12, DEF = 10, INT = 8, AGI = 11;
         private List<IUsable> Items = new List<IUsable>() { new ThrowingKnife(), new HealthPotion(), new ThrowingKnife(), new HealthPotion() };
-        private List<IUsable> Skills = new List<IUsable>() { new Fireball(), new ElectricPulse(), new WaterSpear() };
+        private List<IUsable> Skills = new List<IUsable>() { new Heal(), new CrossSlash(), new Fireball(), new ElectricPulse(), new WaterSpear()};
         private Fight currentFight;
         private int LastSelection = 0;
 
@@ -21,27 +21,28 @@ namespace Projekt
             menu.DrawStats(this);
         }
 
-        public bool Enter(Dungeon enteredDungeon)
+        public void Enter(Dungeon enteredDungeon)
         {
-            if (!enteredDungeon.BeginFights(this))
-                return true;
-            else return false;
+            enteredDungeon.BeginFights(this);                
         }
 
         public void PlayerTurn()
         {
-            RegenerateMP();
+            RegenerateMP(3);
 
             if (Defending)
+            {
+                RegenerateMP(5);
+                Log.Send("Player recovered some MP from Defending!");
                 Defending = false;
+            }
 
             do
             {
                 Return = false;
                 SelectAction();                
             }
-            while (Return);
-            
+            while (Return);        
         }
 
         public void SelectAction()
@@ -52,7 +53,7 @@ namespace Projekt
             {
                 GetType().GetMethod(Action).Invoke(this, null);
             }
-            catch (Exception) { Return = true; }
+            catch (NullReferenceException) { Return = true; }
         }
 
         public void Attack()
@@ -61,7 +62,7 @@ namespace Projekt
             {
                 SelectTarget(currentFight).Hurt(STR);
             }
-            catch(Exception) { Return = true; }
+            catch(NullReferenceException) { Return = true; }
         }
 
         public void Skill()
@@ -72,7 +73,9 @@ namespace Projekt
                 Skills[index].Use(currentFight);
                 
             }
-            catch (Exception) { Return = true; }
+            catch (ArgumentNullException) { Return = true; }
+            catch (NullReferenceException) { Return = true; }
+
         }
         public void Item()
         {
@@ -83,7 +86,8 @@ namespace Projekt
                 Items[index].Use(currentFight);
                 Items.RemoveAt(index);                
             }
-            catch (Exception) { Return = true; }
+            catch (ArgumentNullException) { Return = true; }
+            catch (NullReferenceException) { Return = true; }            
 
         }
         public void Defend()
@@ -136,7 +140,7 @@ namespace Projekt
                 Amount = MAXHP - HP;
             HP += Amount;                        
             menu.UpdateStat(this, 0);
-            Log.Send($"Player recovered {Amount} HP. {HP} HP left.");
+            Log.Send($"* Player recovered {Amount} HP. {HP} HP left.");
         }
 
         public void Hurt(int DMG)
@@ -145,24 +149,29 @@ namespace Projekt
                 DMG = 0;
             HP -= DMG;
             menu.UpdateStat(this, 0);            
-            Log.Send($"Player took {DMG} DMG. {HP} HP left.");
+            Log.Send($"* Player took {DMG} DMG. {HP} HP left.");
             
         }
 
-        public bool DrainMana(int Amount)
+        public bool CheckIfEnoughMP(int Amount)
         {
             if (MP >= Amount)
             {
-                MP -= Amount;
-                menu.UpdateStat(this, 2);
-                Log.Send($"Player used skill. {MP} MP left.");
                 return true;
             }
             else
             {
                 Log.Send($"Not enought MP to use skill.");
+                Return = true;
+                return false;
             }
-            return false;
+        }
+
+        public void DrainMana(int Amount)
+        {           
+            MP -= Amount;
+            menu.UpdateStat(this, 2);
+                        
         }
 
         public void setCurrentFight(Fight fight)
@@ -188,11 +197,11 @@ namespace Projekt
             }
             return 0;
         }
-        public void RegenerateMP()
+        public void RegenerateMP(int Amount)
         {
-            MP += 3;
-            if (MP > MAXMP)
-                MP = MAXMP;
+            if (MP + Amount > MAXMP)
+                Amount = MAXMP - MP;
+            MP += Amount;
             menu.UpdateStat(this,2);
         }
         public void PickUp(IUsable item)
@@ -200,11 +209,10 @@ namespace Projekt
             Items.Add(item);
         }
 
-        public bool checkIfDied()
+        public void checkIfDied()
         {
             if (HP <= 0)
-                return true;
-            return false;
+                throw new Exception("Player has died!");
         }
     }
 }

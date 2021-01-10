@@ -7,8 +7,9 @@ namespace Projekt
     public class Fight
     {
         private List<Enemy> enemyList = new List<Enemy>();
-        private bool clear = false;
+        private bool Clear = false;
         private Player player;
+        private bool PlayerDead;
         private int TurnCount = 0;
 
         public Fight() { }
@@ -20,30 +21,27 @@ namespace Projekt
         }
 
         public List<Enemy> GetEnemyList() { return enemyList; }
-        public Player GetPlayer() { return player; }
+        public Player GetPlayer() { return !PlayerDead ? player : null; }
 
-        public bool Start(Player player)
+        public void Start(Player player)
         {
             this.player = player;
-            player.setCurrentFight(this);
-            bool PlayerIsDead = false;
-            //GlobalsVariables.CurrentFight = this;
+            player.setCurrentFight(this);            
 
             DrawEnemies();
-            while (!clear && !PlayerIsDead)
+            while (!Clear && !PlayerDead)
             {
-                PlayerIsDead = Turn();
+                Turn();
                 if (enemyList.Count == 0)
-                    clear = true;
-            }
-            return PlayerIsDead;    
+                    Clear = true;
+            }            
         }
 
-        public bool Turn()
+        public void Turn()
         {
             TurnCount++;
             Log.Send($"----- Turn {TurnCount} -----");
-
+           
             player.PlayerTurn();
 
             for (int i = 0; i < enemyList.Count; i++)
@@ -64,12 +62,21 @@ namespace Projekt
                 Thread.Sleep(500);
                 Enemy enemy = enemyList[i];
                 enemy.Attack(player);
-                if (player.checkIfDied()) return true;
+                try
+                {
+                    player.checkIfDied();
+                }
+                catch (Exception e)
+                {
+                    Log.Send("");
+                    Log.Send(e.Message);
+                    PlayerDead = true;
+                    break;
+                }
             }
             
             Log.Send("");
-            Thread.Sleep(300);
-            return false;
+            Thread.Sleep(300);            
         }
 
         public void DrawEnemies()

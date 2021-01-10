@@ -14,7 +14,7 @@ namespace Projekt
 
         public void Use(Fight fight)
         {
-            fight.GetPlayer().Heal(20);
+            fight.GetPlayer().Heal(40);
         }
     }
 }

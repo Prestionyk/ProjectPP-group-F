@@ -56,9 +56,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Enemies\Skeleton.cs" />
     <Compile Include="Enemies\Slime.cs" />
+    <Compile Include="Usable\CrossSlash.cs" />
+    <Compile Include="Usable\ElectricPulse.cs" />
+    <Compile Include="Usable\Fireball.cs" />
+    <Compile Include="Usable\Heal.cs" />
     <Compile Include="Usable\ThrowingKnife.cs" />
     <Compile Include="Usable\HealthPotion.cs" />
     <Compile Include="Usable\IUsable.cs" />
+    <Compile Include="Usable\WaterSpear.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
