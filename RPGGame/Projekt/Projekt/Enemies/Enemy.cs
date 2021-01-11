@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Projekt
 {
-    public class Enemy 
+    public abstract class Enemy 
     {
         protected string name;
         protected Dictionary<string, int> Stats = new Dictionary<string, int>()
