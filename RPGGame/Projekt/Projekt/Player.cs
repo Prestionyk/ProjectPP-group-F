@@ -6,9 +6,12 @@ namespace Projekt
 {
     public class Player
     {
-        private Menu menu = new Menu();        
-        private int HP = 50, MAXHP = 50, MP = 30, MAXMP = 30, STR = 12, DEF = 10, INT = 8, AGI = 11;
-        private List<IUsable> Items = new List<IUsable>() { new ThrowingKnife(), new HealthPotion(), new ThrowingKnife(), new HealthPotion() };
+        private Menu menu = new Menu();
+        private Dictionary<string,int> Stats = new Dictionary<string, int>()
+        {
+            { "HP" , 1 },{ "MAXHP" , 50 },{ "MP" , 30 },{ "MAXMP" , 30 },{ "STR" , 120 },{ "DEF" , 10 },{ "INT" , 8 },{ "AGI" , 11 }
+        };
+        private List<IUsable> Items = new List<IUsable>() { new ThrowingKnife(), new ThrowingKnife(), new HealthPotion(), new HealthPotion() };
         private List<IUsable> Skills = new List<IUsable>() { new Heal(), new CrossSlash(), new Fireball(), new ElectricPulse(), new WaterSpear()};
         private Fight currentFight;
         private int LastSelection = 0;
@@ -53,14 +56,14 @@ namespace Projekt
             {
                 GetType().GetMethod(Action).Invoke(this, null);
             }
-            catch (NullReferenceException) { Return = true; }
+            catch (ArgumentNullException) { Return = true; }
         }
 
         public void Attack()
         {
             try
             {
-                SelectTarget(currentFight).Hurt(STR,this);
+                SelectTarget(currentFight).Hurt(Stats["STR"],this);
             }
             catch(NullReferenceException) { Return = true; }
         }
@@ -136,16 +139,16 @@ namespace Projekt
 
         public void Heal(int Amount)
         {
-            if (HP + Amount > MAXHP)
-                Amount = MAXHP - HP;
-            HP += Amount;                        
-            menu.UpdateStat(this, 0);
-            Log.Send($"* Player recovered {Amount} HP. {HP} HP left.");
+            if (Stats["HP"] + Amount > Stats["MAXHP"])
+                Amount = Stats["MAXHP"] - Stats["HP"];
+            Stats["HP"] += Amount;                        
+            menu.UpdateStat(this, "HP");
+            Log.Send($"* Player recovered {Amount} HP. {Stats["HP"]} HP left.");
         }
 
         public void Hurt(int DMG, Enemy enemy)
         {
-            DMG -= (DEF / 5);
+            DMG -= (Stats["DEF"] / 5);
 
             Random roll = new Random();
             bool crit = false, dodge = false;
@@ -155,9 +158,9 @@ namespace Projekt
                 DMG *= 2;
                 crit = true;
             }
-            if (AGI > enemy.GetStats()[7])
+            if (Stats["AGI"] > enemy.GetStats()[7])
             {
-                if (roll.Next(100) <= AGI - enemy.GetStat(7))
+                if (roll.Next(100) <= Stats["AGI"] - enemy.GetStat(7))
                 {
                     DMG = 0;
                     dodge = true;
@@ -168,9 +171,9 @@ namespace Projekt
             if (Defending)
                 DMG /= 2;
 
-            HP -= DMG;
+            Stats["HP"] -= DMG;
 
-            menu.UpdateStat(this, 0);
+            menu.UpdateStat(this, "HP");
 
             if (dodge)
                 Log.Send("* Atack dodged!");
@@ -180,13 +183,13 @@ namespace Projekt
                     Log.Send("* Critical Hit!");
             }
 
-            Log.Send($"* Player took {DMG} DMG. {HP} HP left.");
+            Log.Send($"* Player took {DMG} DMG. {Stats["HP"]} HP left.");
 
         }
 
         public bool CheckIfEnoughMP(int Amount)
         {
-            if (MP >= Amount)
+            if (Stats["MP"] >= Amount)
             {
                 return true;
             }
@@ -199,10 +202,11 @@ namespace Projekt
         }
 
         public void DrainMana(int Amount)
-        {           
-            MP -= Amount;
-            menu.UpdateStat(this, 2);
-                        
+        {
+            Stats["MP"] -= Amount;
+            menu.UpdateStat(this, "MP");
+
+
         }
 
         public void setCurrentFight(Fight fight)
@@ -213,19 +217,19 @@ namespace Projekt
         public List<int> GetStats()
         {
             return new List<int> { 
-                HP, MAXHP, MP, MAXMP, STR, DEF, INT, AGI 
+                Stats["HP"], Stats["MAXHP"],Stats["MP"] ,Stats["MAXMP"] ,Stats["STR"] ,Stats["DEF"] ,Stats["INT"] ,Stats["AGI"]  
             };
         }
-        public int GetStat(int index)
+        public int GetStat(string stat)
         {
-            return GetStats()[index];
+            return Stats[stat];
         }
         public void RegenerateMP(int Amount)
         {
-            if (MP + Amount > MAXMP)
-                Amount = MAXMP - MP;
-            MP += Amount;
-            menu.UpdateStat(this,2);
+            if (Stats["MP"] + Amount > Stats["MAXMP"])
+                Amount = Stats["MAXMP"] - Stats["MP"];
+            Stats["MP"] += Amount;
+            menu.UpdateStat(this, "MP");
         }
         public void PickUp(IUsable item)
         {
@@ -243,7 +247,7 @@ namespace Projekt
 
         public void checkIfDied()
         {
-            if (HP <= 0)
+            if (Stats["HP"] <= 0)
                 throw new Exception("Player has died!");
         }
     }

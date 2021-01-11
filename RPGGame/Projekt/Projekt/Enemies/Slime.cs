@@ -19,11 +19,11 @@ namespace Projekt
 
             spriteWidth = 17;
             name = "Slime";
-            HP = 20;
-            MAXHP = 20;
-            STR = 3;
-            DEF = 2;
-            INT = 4;
+            Stats["HP"] = 20;
+            Stats["MAXHP"] = 20;
+            Stats["STR"] = 3;
+            Stats["DEF"] = 2;
+            Stats["INT"] = 4;
             dropChance = 4;
         }
 

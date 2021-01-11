@@ -6,7 +6,10 @@ namespace Projekt
     public class Enemy 
     {
         protected string name;
-        protected int HP=100, MAXHP=100, MP=20, MAXMP=20, STR=10, DEF=10, INT=10, AGI=10;
+        protected Dictionary<string, int> Stats = new Dictionary<string, int>()
+        {
+            { "HP" , 100 },{ "MAXHP" , 100 },{ "MP" , 20 },{ "MAXMP" , 20 },{ "STR" , 10 },{ "DEF" , 10 },{ "INT" , 10 },{ "AGI" , 10 }
+        };
         protected string sprite;
         protected int spriteWidth, posX, posY;
         protected int dropChance = 2; // czym więcej tym mniejsza szansa
@@ -16,7 +19,7 @@ namespace Projekt
         public List<int> GetStats()
         {
             List<int> stats = new List<int>() {
-                HP, MAXHP, MP, MAXMP, STR, DEF, INT, AGI
+                Stats["HP"], Stats["MAXHP"],Stats["MP"] ,Stats["MAXMP"] ,Stats["STR"] ,Stats["DEF"] ,Stats["INT"] ,Stats["AGI"]
             };
 
             return stats;
@@ -41,7 +44,7 @@ namespace Projekt
 
         public void Attack(Player player)
         {
-            player.Hurt(STR, this);
+            player.Hurt(Stats["STR"], this);
         }
 
         public void Hurt(int DMG,Player player)
@@ -55,15 +58,15 @@ namespace Projekt
             bool crit = false, dodge = false ;
             if (!magic)
             {
-                DMG -= (DEF / 5);
-                if (roll.Next(100) <= player.GetStat(7))
+                DMG -= (Stats["DEF"] / 5);
+                if (roll.Next(100) <= player.GetStat("AGI"))
                 {
                     DMG *= 2;
                     crit = true;
                 }
-                if(player.GetStat(7) > AGI)
+                if(player.GetStat("AGI") > Stats["AGI"])
                 {
-                    if (roll.Next(100) <= AGI - player.GetStat(7))
+                    if (roll.Next(100) <= Stats["AGI"] - player.GetStat("AGI"))
                     {
                         DMG = 0;
                         dodge = true;
@@ -71,14 +74,6 @@ namespace Projekt
                 } 
             }
                 
-            else
-            {
-                if (roll.Next(100) <= player.GetStat(6))
-                {
-                    DMG *= 2;
-                    crit = true;
-                }   
-            }
             if (dodge)
                 Log.Send("* Atack dodged!");
             else
@@ -86,14 +81,14 @@ namespace Projekt
                 if (crit)
                     Log.Send("* Critical Hit!");
             }
-                
+
+            Stats["HP"] -= DMG;
 
             if (checkIfDied())
                 Log.Send($"* {GetName()} was hit for {DMG} DMG and died.");
             else
-                Log.Send($"* {GetName()} was hit for {DMG} DMG. {HP} HP left.");
+                Log.Send($"* {GetName()} was hit for {DMG} DMG. {Stats["HP"]} HP left.");
 
-            HP -= DMG;
             DrawHPBar();
         }
 
@@ -134,7 +129,7 @@ namespace Projekt
             string bar = "[";
             for (int i = 0; i < HPBarWidth ; i++)
             {
-                bar += i <= (HPBarWidth * HP / MAXHP) ? "═" : "-";
+                bar += i <= (HPBarWidth * Stats["HP"] / Stats["MAXHP"]) ? "═" : "-";
             }
             bar += "]";
             Console.Write(bar);
@@ -154,7 +149,7 @@ namespace Projekt
 
         public bool checkIfDied()
         {
-            if (HP <= 0) return true;
+            if (Stats["HP"] <= 0) return true;
             else return false;
         }
 

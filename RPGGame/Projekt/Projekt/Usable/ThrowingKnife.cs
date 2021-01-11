@@ -15,7 +15,7 @@ namespace Projekt
         {
             Player player = fight.GetPlayer();
             Enemy target = player.SelectTarget(fight);
-            target.Hurt((int)(player.GetStat(4) * (1.5)),player);
+            target.Hurt((int)(player.GetStat("STR") * (1.5)),player);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Projekt
                 player.DrainMana(ManaCost);
                 foreach (Enemy e in fight.GetEnemyList())
                 {
-                    e.Hurt(player.GetStat(4), false, player);
+                    e.Hurt(player.GetStat("STR"), false, player);
                     Thread.Sleep(300);
                 }
             }

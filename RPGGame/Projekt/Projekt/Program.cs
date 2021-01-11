@@ -31,8 +31,6 @@ namespace Projekt
 
             player.Enter(dungeon);            
 
-
-            Console.ReadKey();
         }
     }
 }

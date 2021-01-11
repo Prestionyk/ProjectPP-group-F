@@ -17,12 +17,13 @@ namespace Projekt
                       " .-'  ,/" ;
             spriteWidth = 8;
             name = "Skeleton";
-            HP = 70;
-            MAXHP = 70;
-            STR = 5;
-            DEF = 6;
-            INT = 3;
-            
+            Stats["HP"] = 70;
+            Stats["MAXHP"] = 70;
+            Stats["STR"] = 5;
+            Stats["DEF"] = 6;
+            Stats["INT"] = 3;
+
+
         }
 
        /* public string EmptySprite()

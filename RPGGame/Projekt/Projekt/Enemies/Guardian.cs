@@ -23,11 +23,11 @@ namespace Projekt
 
             spriteWidth = 30;
             name = "Guardian";
-            HP = 100;
-            MAXHP = 100;
-            STR = 9;
-            DEF = 9;
-            INT = 7;
+            Stats["HP"] = 100;
+            Stats["MAXHP"] = 100;
+            Stats["STR"] = 9;
+            Stats["DEF"] = 9;
+            Stats["INT"] = 7;
             dropChance = 0;
         }
 

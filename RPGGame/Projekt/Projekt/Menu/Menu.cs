@@ -119,21 +119,28 @@ namespace Projekt
             }
         }
 
-        public void UpdateStat(Player player, int index)
+        public void UpdateStat(Player player, string stat)
         {
             int PosLeft = StatsPosLeft,
                 PosTop = StatsPosTop;
-            int stat = player.GetStat(index);
-            PosTop--;            
+            PosTop--;
+            int index = 0 ;
+            switch (stat)
+            {
+                case "HP":
+                    index = 0;
+                    break;
+                case "MP":
+                    index = 1;
+                    break;
+            }
             PosTop += 2 * (index+1);
-            if (index >= 2) PosTop -= 2;
-            if (index >= 4) PosTop -= 2;
 
             Console.SetCursorPosition(PosLeft + 2 + 3, PosTop);
-            if (index < 3)
-                Console.Write(string.Format("{0, 3}/{1}", player.GetStat(index), player.GetStat(index+1)));            
+            if (stat == "HP" || stat == "MP")
+                Console.Write(string.Format("{0, 3}/{1}", player.GetStat(stat), player.GetStat("MAX"+stat)));            
             else
-                Console.Write(string.Format(" {0, 5}", player.GetStat(index)));
+                Console.Write(string.Format(" {0, 5}", player.GetStat(stat)));
         }
 
         public void DrawFrame(int PositionLeft, int PositionTop, int SizeX, int SizeY)
@@ -163,14 +170,6 @@ namespace Projekt
                 Console.Write(">");
                 menuOptions[SelectedOption].Draw();
                 Console.ResetColor();
-
-                /*Console.SetCursorPosition(menuOptions[SelectedOption].GetX()-1, menuOptions[SelectedOption].GetY());
-                Console.ForegroundColor = ConsoleColor.Black;
-                Console.BackgroundColor = ConsoleColor.Gray;
-                Console.Write(" ");
-                menuOptions[SelectedOption].Draw();
-                Console.Write(" ");
-                Console.ResetColor();*/
 
                 int previousSelection = SelectedOption;
                 switch (Controller.GetButton())

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Projekt
 {
@@ -16,12 +17,20 @@ namespace Projekt
 
        public void BeginFights(Player player)
         {
-            foreach (Fight fight in fightList)
+            for(int i = 0; i < fightList.Count; i++)
             {
-                fight.Start(player);
-                if (fight.GetPlayer() == null)
+                fightList[i].Start(player);
+                if (fightList[i].GetPlayer() == null)
+                {
+                    Console.ReadKey();
                     return;
-            }             
+                }
+                Log.Send("");
+                if(i != fightList.Count -1) Log.Send($"--- Fight {i + 1} Clear! ---");
+                else Log.Send($"--- Dungeon Clear! ---");
+                Thread.Sleep(3000);
+                Log.ClearLog();   
+            }
         }
     }
 }

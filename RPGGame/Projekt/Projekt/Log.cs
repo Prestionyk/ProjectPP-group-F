@@ -34,5 +34,11 @@ namespace Projekt
                 Console.Write(new string(' ', 43));
             }
         }
+
+        public static void ClearLog()
+        {
+            Clear();
+            messages.Clear();
+        }
     }
 }
