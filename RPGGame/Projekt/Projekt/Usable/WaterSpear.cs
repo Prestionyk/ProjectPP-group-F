@@ -5,8 +5,8 @@ namespace Projekt
 {
     class WaterSpear : IUsable
     {
-        private string Name;
-        private int ManaCost = 15;
+        private readonly string Name;
+        private readonly int ManaCost = 15;
         public WaterSpear()
         {
             Name = "Water Spear [15 MP]";
@@ -19,7 +19,7 @@ namespace Projekt
             if (player.CheckIfEnoughMP(ManaCost))
             {
                 Enemy target = player.SelectTarget(fight);
-                target.Hurt(player.GetStat("INT") * 3, true, player);
+                target.Hurt(Calculate.HitDamage(player, target, 400, true));
                 player.DrainMana(ManaCost);
             }
         }

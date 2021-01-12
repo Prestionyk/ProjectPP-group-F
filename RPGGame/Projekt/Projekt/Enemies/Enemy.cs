@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Projekt.Usable;
+using System;
 using System.Collections.Generic;
 
 namespace Projekt
 {
-    public abstract class Enemy 
+    public abstract class Enemy : IStats
     {
         protected string name;
         protected Dictionary<string, int> Stats = new Dictionary<string, int>()
@@ -13,6 +14,7 @@ namespace Projekt
         protected string sprite;
         protected int spriteWidth, posX, posY;
         protected int dropChance = 2; // czym więcej tym mniejsza szansa
+        protected List<IUsable> dropList = new List<IUsable>();
 
         private readonly int HPBarWidth = 8;
 
@@ -24,9 +26,9 @@ namespace Projekt
 
             return stats;
         }
-        public int GetStat(int index)
+        public int GetStat(string key)
         {
-            return GetStats()[index];
+            return Stats[key];
         }
         public string GetName()
         {
@@ -44,47 +46,16 @@ namespace Projekt
 
         public void Attack(Player player)
         {
-            player.Hurt(Stats["STR"], this);
+            player.Hurt(Calculate.HitDamage(this, player));
         }
 
-        public void Hurt(int DMG,Player player)
+        public void Hurt(int DMG)
         {
-            Hurt(DMG, false, player);
-        }
-
-        public void Hurt(int DMG, bool magic, Player player)
-        {
-            Random roll = new Random();
-            bool crit = false, dodge = false ;
-            if (!magic)
-            {
-                DMG -= (Stats["DEF"] / 5);
-                if (roll.Next(100) <= player.GetStat("AGI"))
-                {
-                    DMG *= 2;
-                    crit = true;
-                }
-                if(player.GetStat("AGI") > Stats["AGI"])
-                {
-                    if (roll.Next(100) <= Stats["AGI"] - player.GetStat("AGI"))
-                    {
-                        DMG = 0;
-                        dodge = true;
-                    }
-                } 
-            }
-                
-            if (dodge)
-                Log.Send("* Atack dodged!");
-            else
-            {
-                if (crit)
-                    Log.Send("* Critical Hit!");
-            }
-
             Stats["HP"] -= DMG;
 
-            if (checkIfDied())
+            if (DMG == 0)
+                Log.Send($"* {GetName()} dodged the attack!");
+            else if (CheckIfDied())
                 Log.Send($"* {GetName()} was hit for {DMG} DMG and died.");
             else
                 Log.Send($"* {GetName()} was hit for {DMG} DMG. {Stats["HP"]} HP left.");
@@ -147,7 +118,7 @@ namespace Projekt
             Console.Write(new string(' ', HPBarWidth + 2));                        
         }
 
-        public bool checkIfDied()
+        public bool CheckIfDied()
         {
             if (Stats["HP"] <= 0) return true;
             else return false;
@@ -155,9 +126,12 @@ namespace Projekt
 
         public void DropReward(Player player)
         {
-            Random roll = new Random();
-            if(roll.Next(dropChance) == 0)
-                player.PickUp(new HealthPotion());
+            if (dropList.Count > 0)
+            {
+                Random roll = new Random();
+                if (roll.Next(dropChance) == 0)
+                    player.PickUp(dropList[roll.Next(dropList.Count)]);
+            }
         }
     }
 }

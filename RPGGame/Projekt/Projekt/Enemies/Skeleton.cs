@@ -19,10 +19,10 @@ namespace Projekt
             name = "Skeleton";
             Stats["HP"] = 70;
             Stats["MAXHP"] = 70;
-            Stats["STR"] = 5;
+            Stats["STR"] = 10;
             Stats["DEF"] = 6;
             Stats["INT"] = 3;
-
+            dropList.Add(new ThrowingKnife());
 
         }
 

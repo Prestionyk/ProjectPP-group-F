@@ -7,10 +7,10 @@ namespace Projekt
     class Heal : IUsable
     {
         private string Name;
-        private int ManaCost = 6;
+        private int ManaCost = 10;
         public Heal()
         {
-            Name = "Heal [6 MP]";
+            Name = "Heal [10 MP]";
         }
         public string GetName() { return Name; }
 
@@ -19,7 +19,7 @@ namespace Projekt
             Player player = fight.GetPlayer();
             if (player.CheckIfEnoughMP(ManaCost))
             {
-                player.Heal(30);
+                player.Heal(25);
                 player.DrainMana(ManaCost);
             }
         }

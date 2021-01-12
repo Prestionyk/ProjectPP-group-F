@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace Projekt
 {
-    public class Player
+    public class Player : IStats
     {
         private Menu menu = new Menu();
         private Dictionary<string,int> Stats = new Dictionary<string, int>()
         {
-            { "HP" , 1 },{ "MAXHP" , 50 },{ "MP" , 30 },{ "MAXMP" , 30 },{ "STR" , 120 },{ "DEF" , 10 },{ "INT" , 8 },{ "AGI" , 11 }
+            { "HP" , 60 },{ "MAXHP" , 60 },{ "MP" , 20 },{ "MAXMP" , 20 },{ "STR" , 16 },{ "DEF" , 10 },{ "INT" , 12 },{ "AGI" , 11 }
         };
         private List<IUsable> Items = new List<IUsable>() { new ThrowingKnife(), new ThrowingKnife(), new HealthPotion(), new HealthPotion() };
         private List<IUsable> Skills = new List<IUsable>() { new Heal(), new CrossSlash(), new Fireball(), new ElectricPulse(), new WaterSpear()};
@@ -40,6 +40,8 @@ namespace Projekt
                 Defending = false;
             }
 
+            Calculate.HitDamage(this, currentFight.GetEnemyList()[0], 100, true);
+
             do
             {
                 Return = false;
@@ -63,7 +65,8 @@ namespace Projekt
         {
             try
             {
-                SelectTarget(currentFight).Hurt(Stats["STR"],this);
+                Enemy target = SelectTarget(currentFight);
+                target.Hurt(Calculate.HitDamage(this, target));
             }
             catch(NullReferenceException) { Return = true; }
         }
@@ -146,28 +149,8 @@ namespace Projekt
             Log.Send($"* Player recovered {Amount} HP. {Stats["HP"]} HP left.");
         }
 
-        public void Hurt(int DMG, Enemy enemy)
+        public void Hurt(int DMG)
         {
-            DMG -= (Stats["DEF"] / 5);
-
-            Random roll = new Random();
-            bool crit = false, dodge = false;
-
-            if (roll.Next(100) <= enemy.GetStats()[7])
-            {
-                DMG *= 2;
-                crit = true;
-            }
-            if (Stats["AGI"] > enemy.GetStats()[7])
-            {
-                if (roll.Next(100) <= Stats["AGI"] - enemy.GetStat(7))
-                {
-                    DMG = 0;
-                    dodge = true;
-                }
-            }
-
-
             if (Defending)
                 DMG /= 2;
 
@@ -175,15 +158,10 @@ namespace Projekt
 
             menu.UpdateStat(this, "HP");
 
-            if (dodge)
-                Log.Send("* Atack dodged!");
+            if (DMG != 0)
+                Log.Send($"* Player took {DMG} DMG. {Stats["HP"]} HP left.");
             else
-            {
-                if (crit)
-                    Log.Send("* Critical Hit!");
-            }
-
-            Log.Send($"* Player took {DMG} DMG. {Stats["HP"]} HP left.");
+                Log.Send("* Player dodged an attack!");
 
         }
 
@@ -209,7 +187,7 @@ namespace Projekt
 
         }
 
-        public void setCurrentFight(Fight fight)
+        public void SetCurrentFight(Fight fight)
         {
             currentFight = fight;
         }
@@ -220,9 +198,9 @@ namespace Projekt
                 Stats["HP"], Stats["MAXHP"],Stats["MP"] ,Stats["MAXMP"] ,Stats["STR"] ,Stats["DEF"] ,Stats["INT"] ,Stats["AGI"]  
             };
         }
-        public int GetStat(string stat)
+        public int GetStat(string key)
         {
-            return Stats[stat];
+            return Stats[key];
         }
         public void RegenerateMP(int Amount)
         {
@@ -245,7 +223,7 @@ namespace Projekt
             } 
         }
 
-        public void checkIfDied()
+        public void CheckIfDied()
         {
             if (Stats["HP"] <= 0)
                 throw new Exception("Player has died!");

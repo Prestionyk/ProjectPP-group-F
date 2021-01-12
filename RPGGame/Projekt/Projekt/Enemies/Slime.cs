@@ -11,19 +11,26 @@ namespace Projekt
                      @"/      _______      \" +
                      @"\___________________/" ;*/
 
-            sprite =  "    _-----___    " +
+          /*sprite =  "    _-----___    " +
                       "  .'         '-  " +
                      @" /  ()    ()   \ " +
                      @".     .___.     ." +                     
-                     @"\._____________.'";
+                     @"\._____________.'";*/
 
-            spriteWidth = 17;
+            sprite = "    _-----_    " +
+                     "  .        '-  " +
+                    @" ' ()    ()  ` " +
+                    @"'    .___.    ." +
+                    @"\.___________.'";
+
+            spriteWidth = 15;
             name = "Slime";
             Stats["HP"] = 20;
             Stats["MAXHP"] = 20;
-            Stats["STR"] = 3;
-            Stats["DEF"] = 2;
+            Stats["STR"] = 9;
+            Stats["DEF"] = 10;
             Stats["INT"] = 4;
+            dropList.Add(new HealthPotion());
             dropChance = 4;
         }
 

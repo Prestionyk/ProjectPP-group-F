@@ -22,11 +22,11 @@ namespace Projekt
                 fightList[i].Start(player);
                 if (fightList[i].GetPlayer() == null)
                 {
-                    Console.ReadKey();
+                    Thread.Sleep(3000);
                     return;
                 }
-                Log.Send("");
-                if(i != fightList.Count -1) Log.Send($"--- Fight {i + 1} Clear! ---");
+                Log.Send("");                
+                if (i != fightList.Count - 1) Log.Send($"--- Fight {i + 1} Clear! ---");
                 else Log.Send($"--- Dungeon Clear! ---");
                 Thread.Sleep(3000);
                 Log.ClearLog();   

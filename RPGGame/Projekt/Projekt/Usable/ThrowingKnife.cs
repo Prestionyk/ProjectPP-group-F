@@ -4,7 +4,7 @@ namespace Projekt
 {
     class ThrowingKnife : IUsable
     {
-        private string Name;
+        private readonly string Name;
         public ThrowingKnife() {
             Name = "Throwing Knife";
         }
@@ -15,7 +15,7 @@ namespace Projekt
         {
             Player player = fight.GetPlayer();
             Enemy target = player.SelectTarget(fight);
-            target.Hurt((int)(player.GetStat("STR") * (1.5)),player);
+            target.Hurt(Calculate.HitDamage(player, target, 250, false));
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Projekt
         public void Start(Player player)
         {
             this.player = player;
-            player.setCurrentFight(this);            
+            player.SetCurrentFight(this);            
 
             DrawEnemies();
             while (!Clear && !PlayerDead)
@@ -47,7 +47,7 @@ namespace Projekt
             for (int i = 0; i < enemyList.Count; i++)
             {
                 Enemy enemy = enemyList[i];
-                if (enemy.checkIfDied())
+                if (enemy.CheckIfDied())
                 {
                     enemy.ClearSpriteAndHPBar();
                     enemy.DropReward(player);
@@ -64,7 +64,7 @@ namespace Projekt
                 enemy.Attack(player);
                 try
                 {
-                    player.checkIfDied();
+                    player.CheckIfDied();
                 }
                 catch (Exception e)
                 {

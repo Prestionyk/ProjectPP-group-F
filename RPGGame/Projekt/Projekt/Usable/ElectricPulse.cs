@@ -4,8 +4,8 @@ namespace Projekt
 {
     class ElectricPulse : IUsable
     {
-        private string Name;
-        private int ManaCost = 10;
+        private readonly string Name;
+        private readonly int ManaCost = 10;
         public ElectricPulse()
         {
             Name = "Elec Pulse [10 MP]";
@@ -18,7 +18,7 @@ namespace Projekt
             if (player.CheckIfEnoughMP(ManaCost))
             {
                 Enemy target = player.SelectTarget(fight);
-                target.Hurt(player.GetStat("INT") * 2, true, player);
+                target.Hurt(Calculate.HitDamage(player, target, 250, true));
                 player.DrainMana(ManaCost);
             }
         }

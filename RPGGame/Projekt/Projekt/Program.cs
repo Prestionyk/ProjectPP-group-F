@@ -15,18 +15,22 @@ namespace Projekt
             Dungeon dungeon = new Dungeon();
             Fight Fight_1 = new Fight();
             Fight Fight_2 = new Fight();
-            Skeleton Skeleton = new Skeleton();
-            Skeleton Skeleton2 = new Skeleton();
-            Slime s = new Slime();
-            Guardian guardian = new Guardian();
+            Fight Fight_3 = new Fight();
 
-            Fight_1 += Skeleton;            
-            Fight_1 += Skeleton2;
-            Fight_1 += s;
-            Fight_2 += guardian;
+            Fight_1 += new Slime();
+            Fight_1 += new Slime();
+            Fight_1 += new Slime();
+
+            Fight_2 += new Skeleton();
+            Fight_2 += new Skeleton();
+            Fight_2 += new Slime();
+
+            Fight_3 += new Guardian();
 
             dungeon += Fight_1;
             dungeon += Fight_2;
+            dungeon += Fight_3;
+
             ///////////////////////////////////////////////////
 
             player.Enter(dungeon);            

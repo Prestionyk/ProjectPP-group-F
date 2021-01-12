@@ -6,8 +6,8 @@ namespace Projekt
 {
     class CrossSlash : IUsable
     {
-        private string Name;
-        private int ManaCost = 12;
+        private readonly string Name;
+        private readonly int ManaCost = 12;
         public CrossSlash()
         {
             Name = "Cross Slash [12 MP]";
@@ -22,7 +22,7 @@ namespace Projekt
                 player.DrainMana(ManaCost);
                 foreach (Enemy e in fight.GetEnemyList())
                 {
-                    e.Hurt(player.GetStat("STR"), false, player);
+                    e.Hurt(Calculate.HitDamage(player, e, 100, false));
                     Thread.Sleep(300);
                 }
             }

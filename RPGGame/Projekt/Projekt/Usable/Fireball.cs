@@ -4,8 +4,8 @@ namespace Projekt
 {
     class Fireball : IUsable
     {
-        private string Name;
-        private int ManaCost = 4;
+        private readonly string Name;
+        private readonly int ManaCost = 4;
         public Fireball()
         {
             Name = "Fireball [4 MP]";
@@ -18,7 +18,7 @@ namespace Projekt
             if (player.CheckIfEnoughMP(ManaCost))
             {
                 Enemy target = player.SelectTarget(fight);
-                target.Hurt(player.GetStat("INT"), true, player);
+                target.Hurt(Calculate.HitDamage(player, target, 100, true));
                 player.DrainMana(ManaCost);
             }
         }

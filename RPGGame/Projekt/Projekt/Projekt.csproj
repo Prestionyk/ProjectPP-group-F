@@ -43,7 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Log.cs" />
+    <Compile Include="Calculate.cs" />
+    <Compile Include="Menu\Log.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Dungeon\Dungeon.cs" />
     <Compile Include="Enemies\Enemy.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Enemies\Skeleton.cs" />
     <Compile Include="Enemies\Slime.cs" />
+    <Compile Include="IStats.cs" />
     <Compile Include="Usable\CrossSlash.cs" />
     <Compile Include="Usable\ElectricPulse.cs" />
     <Compile Include="Usable\Fireball.cs" />
