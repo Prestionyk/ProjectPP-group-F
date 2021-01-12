@@ -40,8 +40,6 @@ namespace Projekt
                 Defending = false;
             }
 
-            Calculate.HitDamage(this, currentFight.GetEnemyList()[0], 100, true);
-
             do
             {
                 Return = false;
