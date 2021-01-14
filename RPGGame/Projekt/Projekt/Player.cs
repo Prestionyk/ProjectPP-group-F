@@ -1,4 +1,5 @@
-﻿using Projekt.Usable;
+﻿using Projekt.Exceptions;
+using Projekt.Usable;
 using System;
 using System.Collections.Generic;
 
@@ -9,7 +10,7 @@ namespace Projekt
         private Menu menu = new Menu();
         private Dictionary<string,int> Stats = new Dictionary<string, int>()
         {
-            { "HP" , 60 },{ "MAXHP" , 60 },{ "MP" , 20 },{ "MAXMP" , 20 },{ "STR" , 16 },{ "DEF" , 10 },{ "INT" , 12 },{ "AGI" , 11 }
+            { "HP" , 1 },{ "MAXHP" , 60 },{ "MP" , 20 },{ "MAXMP" , 20 },{ "STR" , 16 },{ "DEF" , 10 },{ "INT" , 12 },{ "AGI" , 11 }
         };
         private List<IUsable> Items = new List<IUsable>() { new ThrowingKnife(), new ThrowingKnife(), new HealthPotion(), new HealthPotion() };
         private List<IUsable> Skills = new List<IUsable>() { new Heal(), new CrossSlash(), new Fireball(), new ElectricPulse(), new WaterSpear()};
@@ -33,30 +34,26 @@ namespace Projekt
         {
             RegenerateMP(3);
 
-            if (Defending)
-            {
-                RegenerateMP(5);
-                Log.Send("Player recovered some MP from Defending!");
-                Defending = false;
-            }
+            if (Defending)            
+                Defending = false;            
 
             do
             {
                 Return = false;
-                SelectAction();                
+                SelectAction();
             }
             while (Return);        
         }
 
         public void SelectAction()
         {
-            menu.DrawMenu();
-            string Action = menu.SelectAction();
+            menu.DrawMenu();            
             try
             {
+                string Action = menu.SelectAction();
                 GetType().GetMethod(Action).Invoke(this, null);
             }
-            catch (ArgumentNullException) { Return = true; }
+            catch (NoChoiceException) { Return = true; }
         }
 
         public void Attack()
@@ -66,19 +63,17 @@ namespace Projekt
                 Enemy target = SelectTarget(currentFight);
                 target.Hurt(Calculate.HitDamage(this, target));
             }
-            catch(NullReferenceException) { Return = true; }
+            catch (NoChoiceException) { Return = true; }
         }
 
         public void Skill()
         {
             try
             {
-                int index = int.Parse(menu.DrawUsable(Skills));
-                Skills[index].Use(currentFight);
-                
+                int index = menu.DrawUsable(Skills);
+                Skills[index].Use(currentFight);                
             }
-            catch (ArgumentNullException) { Return = true; }
-            catch (NullReferenceException) { Return = true; }
+            catch (NoChoiceException) { Return = true; }
 
         }
         public void Item()
@@ -86,17 +81,18 @@ namespace Projekt
             
             try
             {
-                int index = int.Parse(menu.DrawUsable(Items));
+                int index = menu.DrawUsable(Items);
                 Items[index].Use(currentFight);
-                Items.RemoveAt(index);                
+                Items.RemoveAt(index);
             }
-            catch (ArgumentNullException) { Return = true; }
-            catch (NullReferenceException) { Return = true; }            
-
+            catch (NoChoiceException) { Return = true; }     
         }
+
         public void Defend()
         {
             Defending = true;
+            RegenerateMP(5);
+            Log.Send("* Player recovered some MP from Defending!");
         }
 
         public Enemy SelectTarget(Fight fight)
@@ -108,7 +104,7 @@ namespace Projekt
 
             while (true)
             {
-                enemyList[CurrentSelection].DrawSprite(Program.HighlightColor);
+                enemyList[CurrentSelection].DrawSprite(Menu.HighlightColor);
 
                 int PreviousSelection = CurrentSelection;
                 switch (Controller.GetButton())
@@ -125,12 +121,10 @@ namespace Projekt
                         return enemyList[CurrentSelection];
                     case ConsoleKey.X:
                         enemyList[CurrentSelection].DrawSprite();
-                        return null;
+                        throw new NoChoiceException();
                 }
-                if (CurrentSelection < 0)
-                    CurrentSelection = 0;
-                if (CurrentSelection > enemyList.Count - 1)
-                    CurrentSelection = enemyList.Count - 1;
+                if (CurrentSelection < 0 || CurrentSelection > enemyList.Count - 1)
+                    CurrentSelection = PreviousSelection;                                   
 
                 if (PreviousSelection != CurrentSelection)
                     enemyList[PreviousSelection].DrawSprite();
@@ -165,10 +159,8 @@ namespace Projekt
 
         public bool CheckIfEnoughMP(int Amount)
         {
-            if (Stats["MP"] >= Amount)
-            {
+            if (Stats["MP"] >= Amount)            
                 return true;
-            }
             else
             {
                 Log.Send($"Not enought MP to use skill.");
@@ -181,8 +173,28 @@ namespace Projekt
         {
             Stats["MP"] -= Amount;
             menu.UpdateStat(this, "MP");
+        }
 
+        public void RegenerateMP(int Amount)
+        {
+            if (Stats["MP"] + Amount > Stats["MAXMP"])
+                Amount = Stats["MAXMP"] - Stats["MP"];
+            Stats["MP"] += Amount;
+            menu.UpdateStat(this, "MP");
+        }
 
+        public void PickUp(IUsable item)
+        {
+            if (Items.Count == 6)
+            {
+                Log.Send("* Inventory is full.");
+            }
+
+            else
+            {
+                Log.Send($"* Obtained a {item.GetName()}");
+                Items.Add(item);
+            }
         }
 
         public void SetCurrentFight(Fight fight)
@@ -193,38 +205,18 @@ namespace Projekt
         public List<int> GetStats()
         {
             return new List<int> { 
-                Stats["HP"], Stats["MAXHP"],Stats["MP"] ,Stats["MAXMP"] ,Stats["STR"] ,Stats["DEF"] ,Stats["INT"] ,Stats["AGI"]  
+                Stats["HP"], Stats["MAXHP"], Stats["MP"], Stats["MAXMP"], Stats["STR"], Stats["DEF"], Stats["INT"], Stats["AGI"]  
             };
         }
         public int GetStat(string key)
         {
             return Stats[key];
         }
-        public void RegenerateMP(int Amount)
-        {
-            if (Stats["MP"] + Amount > Stats["MAXMP"])
-                Amount = Stats["MAXMP"] - Stats["MP"];
-            Stats["MP"] += Amount;
-            menu.UpdateStat(this, "MP");
-        }
-        public void PickUp(IUsable item)
-        {
-            if(Items.Count == 6)
-            {
-                Log.Send("* Inventory is full.");
-            }
-
-            else 
-            {
-                Log.Send($"* Obtained a {item.GetName()}");
-                Items.Add(item);
-            } 
-        }
 
         public void CheckIfDied()
         {
             if (Stats["HP"] <= 0)
-                throw new Exception("Player has died!");
+                throw new PlayerDeadException();
         }
     }
 }

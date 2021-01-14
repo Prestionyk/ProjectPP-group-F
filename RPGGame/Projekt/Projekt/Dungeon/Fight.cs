@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Projekt.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -9,19 +10,17 @@ namespace Projekt
         private List<Enemy> enemyList = new List<Enemy>();
         private bool Clear = false;
         private Player player;
-        private bool PlayerDead;
         private int TurnCount = 0;
 
         public Fight() { }
         public static Fight operator +(Fight fight, Enemy enemy)
         {
-
             fight.enemyList.Add(enemy);
             return fight;
         }
 
         public List<Enemy> GetEnemyList() { return enemyList; }
-        public Player GetPlayer() { return !PlayerDead ? player : null; }
+        public Player GetPlayer() { return player; }
 
         public void Start(Player player)
         {
@@ -29,7 +28,7 @@ namespace Projekt
             player.SetCurrentFight(this);            
 
             DrawEnemies();
-            while (!Clear && !PlayerDead)
+            while (!Clear)
             {
                 Turn();
                 if (enemyList.Count == 0)
@@ -62,17 +61,8 @@ namespace Projekt
                 Thread.Sleep(500);
                 Enemy enemy = enemyList[i];
                 enemy.Attack(player);
-                try
-                {
-                    player.CheckIfDied();
-                }
-                catch (Exception e)
-                {
-                    Log.Send("");
-                    Log.Send(e.Message);
-                    PlayerDead = true;
-                    break;
-                }
+
+                player.CheckIfDied();
             }
             
             Log.Send("");

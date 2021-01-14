@@ -3,9 +3,7 @@
 namespace Projekt
 {
     class Program
-    {        
-        public static readonly ConsoleColor HighlightColor = ConsoleColor.Yellow;
-
+    {
         static void Main(string[] args)
         {
             Console.CursorVisible = false;
@@ -33,7 +31,7 @@ namespace Projekt
 
             ///////////////////////////////////////////////////
 
-            player.Enter(dungeon);            
+            player.Enter(dungeon);
 
         }
     }

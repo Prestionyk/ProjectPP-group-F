@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Projekt.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -15,16 +16,21 @@ namespace Projekt
             return dungeon;
         }
 
-       public void BeginFights(Player player)
+        public void BeginFights(Player player)
         {
             for(int i = 0; i < fightList.Count; i++)
             {
-                fightList[i].Start(player);
-                if (fightList[i].GetPlayer() == null)
+                try
                 {
+                    fightList[i].Start(player);
+                }
+                catch (PlayerDeadException)
+                {
+                    Log.Send("");
+                    Log.Send("Player has died!");
                     Thread.Sleep(3000);
                     return;
-                }
+                }                
                 Log.Send("");                
                 if (i != fightList.Count - 1) Log.Send($"--- Fight {i + 1} Clear! ---");
                 else Log.Send($"--- Dungeon Clear! ---");

@@ -77,26 +77,17 @@ namespace Projekt
         }
 
         public void DrawSprite()
-        {           
-            Console.SetCursorPosition(posX, posY);
-            string SpriteLine = "";
-
-            for (int i = 0; i < sprite.Length; i++)
+        {
+            for (int i = 0; i < sprite.Length / spriteWidth; i++)
             {
-                
-                SpriteLine += sprite[i];
-                if (SpriteLine.Length == spriteWidth)
-                {
-                    Console.Write(SpriteLine);
-                    Console.SetCursorPosition(posX, posY + (i + 1) / spriteWidth);
-                    SpriteLine = "";
-                }
+                Console.SetCursorPosition(posX, posY + i);
+                Console.Write(sprite.Substring(i * spriteWidth, spriteWidth));                
             }
         }        
 
         public void DrawHPBar()
         {            
-            Console.SetCursorPosition(posX - (HPBarWidth + 2) /2 + spriteWidth / 2, posY + sprite.Length / spriteWidth + 1);            
+            Console.SetCursorPosition(posX - (HPBarWidth + 2) / 2 + spriteWidth / 2, posY + sprite.Length / spriteWidth + 1);            
             string bar = "[";
             for (int i = 0; i < HPBarWidth ; i++)
             {

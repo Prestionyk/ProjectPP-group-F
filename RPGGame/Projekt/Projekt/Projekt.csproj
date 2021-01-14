@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calculate.cs" />
+    <Compile Include="Exceptions\Exceptions.cs" />
     <Compile Include="Menu\Log.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Dungeon\Dungeon.cs" />
