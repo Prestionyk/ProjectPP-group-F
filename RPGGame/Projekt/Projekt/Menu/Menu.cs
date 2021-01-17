@@ -48,6 +48,17 @@ namespace Projekt
         public int DrawUsable(List<IUsable> list)
         {
             ClearMenu(); //Wyczyść opcje które wcześniej tam były
+            if(list.Count == 0)
+            {
+                Console.SetCursorPosition(PositionLeft + 7, PositionTop + 1);
+                Console.Write("<EMPTY>");
+                while (true)
+                {
+                    ConsoleKey key = Controller.GetButton();
+                    if (key == ConsoleKey.Z || key == ConsoleKey.X)
+                        throw new NoChoiceException();
+                }
+            }
             List<MenuOption> options = new List<MenuOption>();
             int PosLeft = PositionLeft,
                 PosTop = PositionTop;
