@@ -10,7 +10,7 @@ namespace Projekt
         private Menu menu = new Menu();
         private Dictionary<string,int> Stats = new Dictionary<string, int>()
         {
-            { "HP" , 1 },{ "MAXHP" , 60 },{ "MP" , 20 },{ "MAXMP" , 20 },{ "STR" , 16 },{ "DEF" , 10 },{ "INT" , 12 },{ "AGI" , 11 }
+            { "HP" , 60},{ "MAXHP" , 60 },{ "MP" , 20 },{ "MAXMP" , 20 },{ "STR" , 16 },{ "DEF" , 10 },{ "INT" , 12 },{ "AGI" , 11 }
         };
         private List<IUsable> Items = new List<IUsable>() { new ThrowingKnife(), new ThrowingKnife(), new HealthPotion(), new HealthPotion() };
         private List<IUsable> Skills = new List<IUsable>() { new Heal(), new CrossSlash(), new Fireball(), new ElectricPulse(), new WaterSpear()};
